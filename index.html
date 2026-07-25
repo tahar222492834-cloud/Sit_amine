@@ -1219,7 +1219,8 @@ function renderAdmin(){
   sb.from('profiles').select('*').then(({data, error})=>{
     if(error){ document.getElementById('adminUsersTable').innerHTML = ''; document.getElementById('adminPendingAccountsTable').innerHTML = ''; return; }
 
-    const pendingAccounts = data.filter(u=>!u.approved);
+    const pendingAccounts = data.filter(u => u.approved === false || u.approved === null);
+    
     document.getElementById('adminPendingAccountsTable').innerHTML = pendingAccounts.map(u=>`
       <tr>
         <td data-label="اسم المستخدم">${u.username}</td>
