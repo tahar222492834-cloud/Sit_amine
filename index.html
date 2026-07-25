@@ -1219,7 +1219,7 @@ function renderAdmin(){
   sb.from('profiles').select('*').then(({data, error})=>{
     if(error){ document.getElementById('adminUsersTable').innerHTML = ''; document.getElementById('adminPendingAccountsTable').innerHTML = ''; return; }
 
-    const pendingAccounts = data.filter(u => u.approved === false || u.approved === null);
+    const pendingAccounts = data.filter(u => u.approved === false || u.approved === true);
     
     document.getElementById('adminPendingAccountsTable').innerHTML = pendingAccounts.map(u=>`
       <tr>
