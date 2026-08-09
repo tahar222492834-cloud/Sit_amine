@@ -1,0 +1,2584 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MobyMC — سوق مودات ماين كرافت</title>
+<meta name="description" content="MobyMC هو سوق مودات ماين كرافت المفتوح — اصنع، شارك، وحمّل مودات، Resource Packs، وإضافات Minecraft Bedrock. انضم لمجتمع صنّاع المودات العرب.">
+<meta name="keywords" content="MobyMC, ماين كرافت, مودات, Minecraft, Minecraft mods, Bedrock addons, Resource Packs, مودات ماين كرافت">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://modymc.onrender.com/">
+<meta property="og:site_name" content="MobyMC">
+<meta property="og:title" content="MobyMC — سوق مودات ماين كرافت">
+<meta property="og:site_name" content="MobyMC">
+<meta property="og:site_name" content="MobyMC">
+<meta property="og:description" content="اصنع، شارك، والعب عالمك الخاص من مودات ماين كرافت.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://modymc.onrender.com/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MobyMC — سوق مودات ماين كرافت">
+<meta name="twitter:description" content="اصنع، شارك، والعب عالمك الخاص من مودات ماين كرافت.">
+<meta property="og:image" content="https://modymc.onrender.com/logo.png">
+<meta name="twitter:image" content="https://modymc.onrender.com/logo.png">
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<style>
+/* ================= TOKENS (Bedrock "Create New World" palette) ================= */
+:root{
+  --bg:#2c2c2e;
+  --panel:#39393c; --panel-2:#2f2f32; --panel-3:#242426;
+  --divider:#4c4c50;
+  --header-bg:#ececee; --header-text:#1c1c1e;
+  --green:#4c8f2e; --green-line:#2e5a19; --green-light:#63b13f;
+  --gray-btn:#dcdce0; --gray-btn-text:#232326; --gray-btn-hover:#e9e9ec;
+  --purple:#8b5de0; --purple-line:#5f38a8;
+  --red:#c0392b; --red-line:#812218;
+  --white:#f4f4f5; --muted:#a7a7ac;
+  --gold:#f0c93b;
+  --radius:8px;
+  --font:'Baloo 2', 'Tahoma', sans-serif;
+  --ease:cubic-bezier(.2,.7,.3,1);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;}
+body{
+  margin:0;background:var(--bg);color:var(--white);
+  font-family:var(--font);font-weight:500;font-size:18px;line-height:1.5;min-height:100vh;
+  overflow-x:hidden;
+}
+h1,h2,h3{font-weight:800;line-height:1.4;}
+a{color:inherit;text-decoration:none;}
+::selection{background:var(--green);color:#fff;}
+button{font:inherit;}
+
+/* ================= ICONS (Lucide) ================= */
+svg.lucide{width:1em;height:1em;stroke-width:2.3;flex-shrink:0;vertical-align:-0.15em;}
+.icon-sm svg.lucide{width:15px;height:15px;}
+.icon-md svg.lucide{width:19px;height:19px;}
+.icon-lg svg.lucide{width:24px;height:24px;}
+
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+}
+
+/* ================= BUTTONS (flat, bottom-edge depth) ================= */
+.mc-btn{
+  font-family:var(--font);font-weight:700;font-size:15px;color:var(--gray-btn-text);
+  background:var(--gray-btn);border:2px solid #000;border-radius:var(--radius);
+  padding:13px 20px;cursor:pointer;text-align:center;
+  box-shadow:0 3px 0 rgba(0,0,0,.4);
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  transition:transform .06s var(--ease), box-shadow .06s var(--ease), filter .15s ease;
+  user-select:none;
+}
+.mc-btn:hover{background:var(--gray-btn-hover);}
+.mc-btn:active,.mc-btn.active{
+  background:var(--green);color:#fff;
+  box-shadow:0 1px 0 var(--green-line);
+  transform:translateY(2px);
+}
+.mc-btn:active{transform:translateY(2px) scale(.96);}
+.mc-btn.primary{background:var(--green);color:#fff;box-shadow:0 3px 0 var(--green-line);}
+.mc-btn.primary:hover{background:var(--green-light);}
+.mc-btn.primary:active{box-shadow:0 1px 0 var(--green-line);transform:translateY(2px) scale(.96);}
+.mc-btn.purple{background:var(--purple);color:#fff;box-shadow:0 3px 0 var(--purple-line);}
+.mc-btn.purple:hover{filter:brightness(1.08);}
+.mc-btn.big{font-size:16px;padding:17px 24px;width:100%;}
+.mod-actions-row{display:flex;gap:8px;align-items:stretch;}
+.mod-actions-row .mc-btn.grow{flex:1;width:auto;font-size:15px;padding:14px 10px;}
+.mc-btn.icon-only{width:52px;flex-shrink:0;padding:0;}
+.mc-btn.icon-only svg{width:20px;height:20px;}
+.mc-btn.danger{background:var(--red);color:#fff;box-shadow:0 3px 0 var(--red-line);}
+.mc-btn.ghost{background:transparent;color:var(--white);border-color:var(--divider);box-shadow:none;}
+.mc-btn:disabled{opacity:.5;cursor:not-allowed;}
+
+/* ================= SEGMENTED CONTROL (Game mode / Difficulty style) ================= */
+.seg-btn{
+  position:relative;font-family:var(--font);font-weight:700;font-size:14px;
+  background:var(--gray-btn);color:var(--gray-btn-text);border:2px solid #000;
+  cursor:pointer;padding:13px 18px;text-align:center;transition:background .1s ease,color .1s ease;
+}
+.seg-btn.active{background:var(--green);color:#fff;}
+.seg-btn.active::after{
+  content:"";position:absolute;bottom:5px;left:50%;transform:translateX(-50%);
+  width:26px;height:3px;background:#fff;border-radius:2px;
+}
+
+/* ================= PANELS ================= */
+.mc-panel,.dark-panel{background:var(--panel);color:var(--white);border:2px solid #000;border-radius:var(--radius);padding:18px;}
+
+/* ================= HEADER ================= */
+header.site{background:var(--header-bg);border-bottom:2px solid #000;box-shadow:0 4px 10px rgba(0,0,0,.3);padding:12px 16px;position:sticky;top:0;z-index:60;}
+.header-inner{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.back-btn{background:transparent;border:none;font-size:22px;color:var(--header-text);cursor:pointer;padding:4px 6px;flex-shrink:0;}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;flex-shrink:0;}
+.logo svg{width:30px;height:30px;image-rendering:pixelated;}
+.logo .word{font-weight:800;font-size:19px;color:var(--header-text);}
+.search-wrap{flex:1;min-width:180px;display:flex;order:2;gap:8px;position:relative;}
+.search-wrap input{flex:1;font-family:var(--font);font-size:16px;padding:12px 14px;border:2px solid #000;border-radius:var(--radius);background:var(--panel-3);color:var(--white);outline:none;min-width:0;}
+.search-wrap input::placeholder{color:var(--muted);}
+.search-wrap button{padding:12px 16px;flex-shrink:0;background:var(--panel-3);color:#fff;box-shadow:0 3px 0 #000;}
+.search-wrap button:hover{background:#3a3a3d;}
+.search-filters-panel{
+  display:none;position:absolute;top:calc(100% + 8px);right:0;left:0;z-index:80;
+  background:var(--panel);border:2px solid #000;border-radius:var(--radius);
+  box-shadow:0 8px 20px rgba(0,0,0,.4);padding:14px;
+}
+.search-filters-panel.open{display:block;}
+.search-filters-panel label{display:block;font-size:12px;color:var(--muted);font-weight:700;margin:6px 0 4px;}
+.search-filters-panel select{
+  width:100%;font-family:var(--font);font-weight:700;font-size:14px;color:var(--white);
+  background:var(--panel-2);border:2px solid #000;border-radius:var(--radius);
+  padding:11px 12px;cursor:pointer;
+}
+nav.main-nav{display:flex;gap:8px;flex-wrap:wrap;order:3;}
+nav.main-nav .mc-btn{font-size:13px;padding:10px 14px;}
+
+.lang-picker{position:relative;flex-shrink:0;}
+.lang-menu{display:none;position:absolute;top:calc(100% + 6px);left:0;background:var(--panel);border:2px solid #000;border-radius:var(--radius);min-width:140px;z-index:75;overflow:hidden;box-shadow:0 6px 14px rgba(0,0,0,.4);}
+.lang-menu.open{display:block;}
+.lang-menu button{display:block;width:100%;padding:12px 16px;background:transparent;border:none;color:var(--white);text-align:right;cursor:pointer;font-family:var(--font);font-weight:700;font-size:14px;}
+.lang-menu button:hover{background:var(--panel-2);}
+@media(max-width:760px){ .lang-menu{left:auto;right:0;} }
+
+main{max-width:1240px;margin:0 auto;padding:26px 20px 10px;}
+
+/* ---- Mobile bottom app bar ---- */
+.bottom-nav{display:none;position:fixed;left:0;right:0;bottom:0;z-index:70;
+  background:var(--panel);border-top:2px solid #000;
+  padding-bottom:env(safe-area-inset-bottom,0);}
+.nav-hidden{display:none !important;}
+.bottom-nav-inner{display:flex;max-width:600px;margin:0 auto;}
+.bottom-nav-inner button{
+  flex:1;background:transparent;border:none;color:var(--muted);cursor:pointer;
+  font-family:var(--font);font-weight:700;font-size:11px;padding:10px 2px 8px;
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  min-height:52px;justify-content:center;
+}
+.bottom-nav-inner button .ic{font-size:20px;}
+.bottom-nav-inner button.active{color:var(--green-light);}
+
+/* ---- 'more' action sheet ---- */
+.sheet-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:80;}
+.sheet-overlay.open{display:block;}
+.sheet{
+  position:fixed;left:12px;right:12px;bottom:12px;z-index:81;
+  background:var(--panel);border:2px solid #000;border-radius:var(--radius);
+  padding:14px;display:none;padding-bottom:calc(14px + env(safe-area-inset-bottom,0));
+}
+.sheet.open{display:block;}
+.sheet .mc-btn{width:100%;margin-bottom:8px;text-align:center;}
+
+@media(max-width:760px){
+  nav.main-nav{display:none;}
+  .bottom-nav{display:block;}
+  body{padding-bottom:70px;}
+  .header-inner{gap:10px;}
+  .search-wrap{order:2;flex-basis:100%;}
+  main{padding:16px 12px 10px;}
+  .logo .word{font-size:16px;}
+}
+@media(max-width:380px){
+  body{font-size:16px;}
+  .logo .word{font-size:14px;}
+}
+
+/* ================= SECTION TITLE ================= */
+.section-title{
+  font-size:19px;font-weight:800;color:var(--white);
+  border-bottom:2px solid var(--divider);padding-bottom:10px;margin:36px 0 18px;
+}
+.section-sub{margin-top:-10px;margin-bottom:18px;color:var(--muted);font-size:15px;}
+
+/* ================= HERO ================= */
+.hero{
+  background:linear-gradient(180deg, rgba(76,143,46,.10), transparent), var(--panel);
+  border:2px solid #000;border-radius:var(--radius);
+  padding:40px;margin-top:10px;
+}
+@media(max-width:600px){.hero{padding:22px 18px;}}
+.hero-copy .eyebrow{font-weight:700;font-size:14px;color:var(--purple);letter-spacing:.3px;margin-bottom:12px;display:block;}
+.hero h1{font-size:26px;color:var(--white);margin:0 0 14px;}
+.hero p{font-size:18px;color:var(--muted);max-width:560px;margin:0 0 22px;}
+.hero .hero-actions{display:flex;gap:14px;flex-wrap:wrap;}
+.hero .hero-actions .mc-btn{width:auto;}
+.hero-stats{display:flex;gap:26px;margin-top:24px;flex-wrap:wrap;}
+.hero-stats div{text-align:right;}
+.hero-stats .n{font-weight:800;font-size:19px;color:var(--gold);}
+.hero-stats .l{font-size:13px;color:var(--muted);}
+@media(max-width:600px){
+  .hero h1{font-size:20px;}
+  .hero p{font-size:16px;}
+  .hero .hero-actions .mc-btn{flex:1;min-width:130px;}
+  .hero-stats{gap:16px;justify-content:space-between;}
+}
+@keyframes glintmove{0%{background-position:120% 0;}100%{background-position:-20% 0;}}
+@keyframes heartPop{0%{transform:scale(1);}35%{transform:scale(1.4);}65%{transform:scale(.88);}100%{transform:scale(1);}}
+
+/* ================= CATEGORY SEGMENTED ROW ================= */
+.hotbar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;max-width:100%;}
+.cat-chip{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;
+  width:80px;height:80px;
+  font-family:var(--font);font-weight:700;font-size:12px;color:var(--gray-btn-text);
+  background:var(--gray-btn);border:2px solid #000;border-radius:var(--radius);
+  padding:8px 4px;cursor:pointer;text-align:center;white-space:normal;line-height:1.15;user-select:none;
+  box-shadow:0 3px 0 rgba(0,0,0,.4);
+  transition:transform .06s var(--ease), box-shadow .06s var(--ease), background .1s ease,color .1s ease;
+}
+.cat-chip .chip-icon{display:flex;}
+.cat-chip .chip-icon svg{width:22px;height:22px;stroke-width:2.2;}
+.cat-chip:hover{background:var(--gray-btn-hover);}
+.cat-chip:active{transform:scale(.93);}
+.cat-chip.active{background:var(--green);color:#fff;box-shadow:0 1px 0 var(--green-line);transform:translateY(2px);}
+.hotbar-wrap{margin-bottom:44px;text-align:center;}
+@media(max-width:600px){
+  .hotbar{flex-wrap:nowrap;overflow-x:auto;justify-content:flex-start;max-width:100%;
+    scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;margin:0 -12px;padding:2px 12px;}
+  .cat-chip{flex-shrink:0;scroll-snap-align:start;width:70px;height:70px;font-size:11px;}
+  .cat-chip .chip-icon svg{width:19px;height:19px;}
+  .hotbar-wrap{margin-bottom:32px;}
+}
+
+/* ================= DOWNLOAD HISTORY ================= */
+.dl-row{display:flex;align-items:center;gap:14px;background:var(--panel);border:2px solid #000;
+  border-radius:var(--radius);padding:12px 14px;margin-bottom:12px;cursor:pointer;transition:background .1s var(--ease);}
+.dl-row:hover{background:var(--panel-2);}
+.dl-row .dl-thumb{width:52px;height:52px;border-radius:8px;overflow:hidden;flex-shrink:0;background:var(--panel-3);
+  display:flex;align-items:center;justify-content:center;color:var(--muted);}
+.dl-row .dl-thumb img{width:100%;height:100%;object-fit:cover;}
+.dl-row .dl-info{flex:1;min-width:0;}
+.dl-row .dl-name{font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--white);}
+.dl-row .dl-sub{color:var(--muted);font-size:12px;margin-top:2px;}
+
+/* ================= MOD LIST (one full-width card per row, image on top) ================= */
+.grid{display:flex;flex-direction:column;gap:14px;}
+.mod-card{
+  background:var(--panel);border:2px solid #000;border-radius:var(--radius);overflow:hidden;
+  cursor:pointer;display:flex;flex-direction:column;
+  transition:transform .1s var(--ease), box-shadow .1s var(--ease);
+}
+.mod-card:hover{transform:translateY(-3px);box-shadow:0 6px 14px rgba(0,0,0,.4);}
+.mod-card:active{transform:scale(.97);box-shadow:0 2px 6px rgba(0,0,0,.4);}
+.card-author-row{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;padding:12px 14px;}
+.card-author-row .card-author-left{display:flex;align-items:center;gap:8px;cursor:pointer;min-width:0;}
+.card-author-row .card-avatar{width:32px;height:32px;border-radius:50%;background:var(--green);border:2px solid #000;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;color:#fff;}
+.card-author-row .card-avatar img{width:100%;height:100%;object-fit:cover;}
+.card-author-row .card-avatar svg{width:16px;height:16px;}
+.card-author-row .card-author-text{display:flex;flex-direction:column;gap:2px;min-width:0;}
+.card-author-row .card-author-name{font-size:14px;font-weight:700;color:var(--white);display:flex;align-items:center;gap:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.card-author-row .card-author-left:hover .card-author-name{color:var(--green-light);text-decoration:underline;}
+.card-author-row .card-author-date{font-size:12px;color:var(--muted);}
+.card-stats{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0;}
+.card-stats .stats-top-row{display:flex;gap:5px;}
+.stat-pill{display:flex;align-items:center;gap:5px;font-size:12.5px;font-weight:800;padding:4px 9px;border-radius:6px;border:2px solid;background:var(--panel-3);white-space:nowrap;}
+.stat-pill.rating{color:var(--gold);border-color:var(--gold);}
+.stat-pill.downloads{color:var(--green-light);border-color:var(--green-line);}
+.stat-pill.views{color:var(--purple);border-color:var(--purple-line);}
+.mod-thumb{
+  width:100%;height:170px;
+  background:radial-gradient(circle at 50% 40%, rgba(255,255,255,.06), transparent 60%), var(--panel-2);
+  display:flex;align-items:center;justify-content:center;font-size:52px;
+  border-bottom:2px solid #000;position:relative;overflow:hidden;
+}
+.mod-thumb::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg, transparent 45%, rgba(255,255,255,.25) 50%, transparent 55%);
+  background-size:250% 250%;background-position:120% 0;opacity:0;transition:opacity .2s ease;}
+.mod-card:hover .mod-thumb::after{opacity:1;animation:glintmove 1.1s ease-in-out;}
+.mod-thumb .badge{position:absolute;top:8px;right:8px;background:var(--gold);color:#241a00;font-weight:800;font-size:12px;padding:5px 9px;border-radius:6px;}
+.fav-star-btn{position:absolute;bottom:8px;left:8px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.55);
+  border:2px solid #000;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;z-index:2;
+  transition:transform .12s var(--ease), background .15s ease;}
+.fav-star-btn svg{width:12px;height:12px;transition:transform .15s var(--ease);}
+.fav-star-btn.active{color:var(--red);}
+.fav-star-btn.active svg{fill:var(--red);animation:heartPop .3s var(--ease);}
+.fav-star-btn:hover{background:rgba(0,0,0,.75);}
+.fav-star-btn:active{transform:scale(.85);}
+.mod-body{padding:16px;display:flex;flex-direction:column;gap:8px;}
+.mod-body .card-tags{display:flex;gap:6px;flex-wrap:wrap;}
+.mod-body .card-tags .tag{padding:3px 9px;font-size:11.5px;}
+.mod-body .name{font-weight:800;font-size:17px;color:var(--white);}
+.mod-body .card-desc{font-size:14px;color:var(--muted);line-height:1.5;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+@media(max-width:600px){
+  .mod-thumb{height:130px;font-size:42px;}
+  .mod-body{padding:12px;gap:6px;}
+  .mod-body .name{font-size:15px;}
+  .mod-body .card-desc{font-size:13px;}
+  .stat-pill{font-size:11.5px;padding:3px 7px;}
+}
+
+/* ================= MOD DETAIL ================= */
+.mod-detail{display:grid;grid-template-columns:2fr 1fr;gap:26px;margin-top:22px;min-width:0;}
+.mod-detail > *{min-width:0;}
+@media(max-width:820px){.mod-detail{grid-template-columns:1fr;}}
+.gallery-main{height:290px;background:var(--panel-2);border:2px solid #000;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:76px;margin-bottom:10px;position:relative;overflow:hidden;touch-action:pan-y;}
+.gallery-main img{width:100%;height:100%;object-fit:cover;user-select:none;-webkit-user-drag:none;}
+#modGalleryMain{width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
+.gallery-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.55);border:2px solid #000;color:#fff;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2;}
+.gallery-nav.prev{right:10px;}
+.gallery-nav.next{left:10px;}
+.gallery-dots{position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;gap:6px;z-index:2;}
+.gallery-dots span{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.4);}
+.gallery-dots span.active{background:#fff;}
+.gallery-thumbs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;width:100%;max-width:100%;}
+.gallery-thumbs div{width:72px;height:52px;flex-shrink:0;background:var(--panel-2);border:2px solid #000;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;background-size:cover;background-position:center;}
+.gallery-thumbs div.active{outline:2px solid var(--green-light);outline-offset:2px;}
+
+/* ================= PAGINATION ================= */
+.pagination{display:flex;justify-content:center;align-items:center;gap:8px;margin:20px 0 8px;flex-wrap:wrap;}
+.pagination button{min-width:40px;padding:9px 12px;font-size:14px;}
+.pagination button.active{background:var(--green);color:#fff;box-shadow:0 3px 0 var(--green-line);}
+
+.video-embed{margin-top:18px;height:230px;background:#000;border:2px solid #000;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:16px;gap:8px;}
+@media(max-width:600px){
+  .gallery-main{height:190px;font-size:52px;}
+  .video-embed{height:170px;}
+  .tab-btn{flex:1;font-size:12px;padding:12px 6px;}
+}
+
+.info-side .title{font-weight:800;font-size:18px;color:var(--white);margin-bottom:14px;}
+.stat-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--divider);font-size:16px;}
+.stat-row span:first-child{display:flex;align-items:center;gap:8px;color:var(--muted);}
+.stat-row span:last-child{color:var(--green-light);font-weight:700;}
+.tag-row{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0;}
+.tag{background:var(--panel-2);border:1px solid var(--divider);border-radius:6px;padding:5px 10px;font-size:13px;font-weight:700;color:var(--purple);}
+
+.tabs{display:flex;gap:8px;margin:28px 0 12px;flex-wrap:wrap;}
+.tab-btn{border-radius:var(--radius);}
+.tab-content{display:none;}
+.tab-content.active{display:block;animation:fadein .15s ease;}
+.changelog-entry{border-right:4px solid var(--green);border-radius:0 6px 6px 0;padding:10px 14px;margin-bottom:12px;background:var(--panel-2);}
+.changelog-entry .ver{color:var(--green-light);font-weight:800;font-size:14px;display:block;margin-bottom:4px;}
+
+.stars{color:var(--gold);font-size:24px;letter-spacing:3px;cursor:pointer;}
+.stars span{opacity:.3;transition:opacity .1s ease;}
+.stars span.filled{opacity:1;}
+
+.comment{display:flex;gap:12px;margin-bottom:16px;padding:14px;background:var(--panel-2);border:1px solid var(--divider);border-radius:var(--radius);}
+.avatar{width:44px;height:44px;background:var(--green);border:2px solid #000;border-radius:8px;flex-shrink:0;}
+.avatar img{width:100%;height:100%;object-fit:cover;border-radius:8px;}
+#profileAvatarWrap{border-radius:50%;}
+.comment .who{font-weight:800;font-size:15px;color:var(--white);}
+.comment .meta{font-size:14px;color:var(--gold);margin-bottom:4px;}
+.comment .actions{display:flex;gap:16px;margin-top:8px;font-size:14px;color:var(--green-light);}
+.comment .actions span{cursor:pointer;}
+.comment-form textarea{width:100%;min-height:84px;background:var(--panel-3);color:var(--white);border:2px solid #000;border-radius:var(--radius);padding:12px;font-family:var(--font);font-size:16px;resize:vertical;}
+
+/* ================= FORMS ================= */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+@media(max-width:700px){.form-grid{grid-template-columns:1fr;}}
+.field{display:flex;flex-direction:column;gap:7px;margin-bottom:14px;}
+.field.full{grid-column:1/-1;}
+.field label{font-weight:700;font-size:14px;color:var(--green-light);}
+.field input,.field select,.field textarea{background:var(--panel-3);color:var(--white);border:2px solid #000;border-radius:var(--radius);padding:11px;font-family:var(--font);font-size:16px;outline:none;}
+.rte-toolbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;background:var(--panel-2);border:2px solid #000;border-bottom:none;border-radius:var(--radius) var(--radius) 0 0;padding:8px;}
+.rte-btn{background:var(--gray-btn);color:var(--gray-btn-text);border:2px solid #000;border-radius:6px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;font-weight:800;flex-shrink:0;transition:background .1s ease,color .1s ease,transform .06s ease;}
+.rte-btn svg.lucide{width:15px;height:15px;}
+.rte-btn:hover{background:var(--gray-btn-hover);}
+.rte-btn u{text-decoration:underline;}
+.rte-btn s{text-decoration:line-through;}
+.rte-btn.rte-active{background:var(--green);color:#fff;box-shadow:inset 0 0 0 2px #000;transform:translateY(1px);}
+.rte-sep{width:2px;align-self:stretch;background:var(--divider);margin:0 2px;}
+.rte-colors{display:flex;align-items:center;gap:5px;}
+.rte-color{width:22px;height:22px;border-radius:50%;border:2px solid #000;cursor:pointer;flex-shrink:0;transition:transform .1s ease,box-shadow .1s ease;}
+.rte-color.rte-active{box-shadow:0 0 0 3px var(--gold);transform:scale(1.1);}
+.rte-editor{background:var(--panel-3);color:var(--white);border:2px solid #000;border-radius:0 0 var(--radius) var(--radius);
+  padding:11px;font-family:var(--font);font-size:16px;outline:none;min-height:120px;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;}
+.rte-editor:empty:before{content:attr(data-placeholder);color:var(--muted);}
+.rte-editor b,.rte-editor strong{font-weight:800;}
+.rte-editor ul,.rte-editor ol,#modDescription ul,#modDescription ol{margin:6px 0;padding-inline-start:24px;}
+.rte-editor li,#modDescription li{margin:2px 0;}
+.dropzone{border:2px dashed var(--divider);border-radius:var(--radius);padding:34px;text-align:center;color:var(--muted);cursor:pointer;font-size:15px;transition:border-color .15s ease,color .15s ease;display:flex;align-items:center;justify-content:center;gap:10px;}
+.dropzone:hover{border-color:var(--green-light);color:var(--white);}
+
+/* ================= AUTH ================= */
+.auth-box{max-width:440px;margin:44px auto;}
+.auth-tabs{display:flex;margin-bottom:18px;}
+.auth-tabs button{flex:1;border-radius:0;}
+.auth-tabs button:first-child{border-radius:var(--radius) 0 0 var(--radius);}
+.auth-tabs button:last-child{border-radius:0 var(--radius) var(--radius) 0;}
+
+/* ================= PROFILE ================= */
+.profile-card{position:relative;}
+.profile-head{display:flex;gap:16px;align-items:center;}
+.profile-head .avatar{width:92px;height:92px;}
+.edit-profile-btn{
+  position:absolute;top:16px;inset-inline-end:16px;width:38px;height:38px;padding:0;flex-shrink:0;
+  border-radius:var(--radius);background:var(--gray-btn);border-color:#000;z-index:2;
+}
+.edit-profile-btn:hover{background:var(--gray-btn-hover);}
+.edit-profile-btn svg{width:16px;height:16px;color:var(--gray-btn-text);}
+.profile-head-info{display:flex;flex-direction:column;gap:10px;min-width:0;flex:1;margin-inline-end:44px;}
+.profile-head-info .title{overflow-wrap:anywhere;}
+.profile-head-info .mc-btn{width:auto;align-self:flex-start;}
+@media(max-width:480px){
+  .profile-head-info .mc-btn{font-size:13px;padding:9px 14px;}
+}
+.profile-stats{display:flex;gap:28px;margin-top:14px;flex-wrap:wrap;}
+.profile-stats .num{font-weight:800;font-size:19px;color:var(--gold);}
+.profile-stats .lbl{font-size:13px;color:var(--muted);}
+
+/* ---- edit profile modal ---- */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:90;}
+.modal-overlay.open{display:block;}
+.modal-card{
+  display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:91;
+  width:min(440px,calc(100% - 32px));max-height:calc(100% - 40px);overflow-y:auto;
+  background:var(--panel);border:2px solid #000;border-radius:var(--radius);padding:20px;
+  box-shadow:0 10px 26px rgba(0,0,0,.5);
+}
+.modal-card.open{display:block;}
+.modal-card .modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+.modal-card .modal-head h3{margin:0;font-size:18px;font-weight:800;}
+.modal-card .modal-close{background:transparent;border:none;color:var(--muted);cursor:pointer;padding:4px;font-size:20px;line-height:1;}
+.modal-card .modal-close:hover{color:var(--white);}
+.modal-avatar-row{display:flex;align-items:center;gap:14px;margin-bottom:18px;}
+.modal-avatar-row .avatar{width:64px;height:64px;flex-shrink:0;}
+
+/* ================= ADMIN ================= */
+.admin-stats{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px;}
+.admin-stats .admin-stat:first-child{grid-column:1 / -1;}
+@media(min-width:760px){ .admin-stats{grid-template-columns:repeat(auto-fit,minmax(170px,1fr));} .admin-stats .admin-stat:first-child{grid-column:auto;} }
+.admin-stat{background:var(--panel);border:2px solid #000;border-radius:var(--radius);padding:18px;text-align:center;}
+.admin-stat .n{font-weight:800;font-size:23px;color:var(--green-light);}
+.admin-stat .l{font-size:14px;color:var(--muted);}
+table.admin-table{width:100%;border-collapse:separate;border-spacing:0 6px;font-size:16px;}
+table.admin-table th,table.admin-table td{padding:11px;text-align:right;background:var(--panel);}
+table.admin-table th{background:var(--panel-2);font-weight:800;font-size:13px;color:var(--white);}
+table.admin-table tr td:first-child{border-right:3px solid var(--green);}
+table.admin-table td:first-child,table.admin-table th:first-child{border-radius:0 var(--radius) var(--radius) 0;}
+table.admin-table td:last-child,table.admin-table th:last-child{border-radius:var(--radius) 0 0 var(--radius);}
+.row-actions{display:flex;gap:6px;flex-wrap:wrap;}
+.row-actions .mc-btn{padding:8px 12px;font-size:13px;}
+@media(max-width:700px){
+  table.admin-table thead{display:none;}
+  table.admin-table{display:block;width:100%;}
+  table.admin-table tbody{display:flex;overflow-x:auto;gap:12px;padding:2px 2px 10px;-webkit-overflow-scrolling:touch;width:100%;}
+  table.admin-table tr{display:block;flex:0 0 230px;border-right:3px solid var(--green);border-radius:0 var(--radius) var(--radius) 0;overflow:hidden;background:var(--panel);}
+  table.admin-table td{display:flex;flex-direction:column;gap:3px;padding:10px 12px;border-radius:0 !important;}
+  table.admin-table td::before{content:attr(data-label);font-weight:800;font-size:11px;color:var(--green-light);}
+  table.admin-table td.row-actions{flex-direction:row;justify-content:flex-start;gap:6px;flex-wrap:wrap;}
+  table.admin-table td.row-actions::before{display:none;}
+}
+
+/* ---- admin paginated list (mods / accounts) — swipe pages of up to 5 rows ---- */
+.admin-list-pager{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;border-radius:var(--radius);}
+.admin-list-pager::-webkit-scrollbar{display:none;}
+.admin-list-page{flex:0 0 100%;scroll-snap-align:start;display:flex;flex-direction:column;gap:10px;padding:2px;}
+.admin-row{display:flex;align-items:center;gap:12px;background:var(--panel);border:2px solid #000;
+  border-radius:var(--radius);padding:10px 12px;cursor:pointer;transition:background .1s var(--ease);}
+.admin-row:hover{background:var(--panel-2);}
+.admin-row .admin-row-thumb{width:48px;height:48px;border-radius:10px;overflow:hidden;flex-shrink:0;background:var(--panel-3);
+  display:flex;align-items:center;justify-content:center;color:var(--muted);}
+.admin-row .admin-row-thumb.round{border-radius:50%;}
+.admin-row .admin-row-thumb img{width:100%;height:100%;object-fit:cover;}
+.admin-row .admin-row-info{flex:1;min-width:0;}
+.admin-row .admin-row-name{font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--white);}
+.admin-row .admin-row-sub{color:var(--muted);font-size:12px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.admin-row .row-actions{flex-shrink:0;justify-content:flex-end;max-width:150px;}
+.admin-row .row-actions .mc-btn{padding:7px 10px;font-size:12px;}
+.admin-list-dots{display:flex;justify-content:center;gap:6px;margin-top:10px;}
+.admin-list-dots span{width:6px;height:6px;border-radius:50%;background:var(--divider);flex-shrink:0;}
+.admin-list-dots span.active{background:var(--green-light);}
+.admin-list-nav{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:10px;}
+.admin-list-nav .admin-list-dots{margin-top:0;}
+.pager-arrow{width:30px;height:30px;padding:0;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.pager-arrow svg{width:15px;height:15px;}
+
+/* ================= PAGES ================= */
+.page{display:none;}
+.page.active{display:block;animation:fadein .18s ease;}
+@keyframes fadein{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+footer{text-align:center;padding:30px;color:var(--muted);background:var(--panel);border-top:2px solid #000;margin-top:70px;font-size:15px;}
+footer .fnote{font-weight:800;font-size:14px;color:var(--green-light);margin-bottom:8px;}
+
+#toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:14px 22px;border:2px solid #000;border-radius:var(--radius);box-shadow:0 4px 0 var(--green-line);font-weight:700;font-size:14px;z-index:999;display:none;}
+
+::-webkit-scrollbar{width:12px;}
+::-webkit-scrollbar-track{background:var(--panel-2);}
+::-webkit-scrollbar-thumb{background:var(--divider);border-radius:6px;}
+</style>
+</head>
+<body>
+
+<div id="inAppWarning" style="display:none;background:var(--gold);color:#1c1c1e;padding:10px 14px;text-align:center;font-weight:700;font-size:13px;position:sticky;top:0;z-index:90;">
+  ⚠️ يبدو أنك فتحت الموقع من داخل تطبيق (تيليجرام/ماسنجر...) — هذا قد يمنع رفع الملفات ويسبب شاشة سوداء. للأفضل: اضغط ⋮ ثم "فتح في المتصفح" (Open in Browser).
+</div>
+
+<header class="site">
+  <div class="header-inner">
+    <button class="back-btn" onclick="go('home')" aria-label="الرئيسية"><i data-lucide="arrow-right" class="icon-lg"></i></button>
+    <div class="logo" onclick="go('home')">
+      <svg viewBox="0 0 16 16"><rect width="16" height="16" fill="#6a4425"/><rect width="16" height="6" fill="#5d9c3f"/><rect x="0" y="4" width="4" height="2" fill="#4a8232"/><rect x="7" y="5" width="3" height="2" fill="#4a8232"/><rect x="12" y="4" width="3" height="2" fill="#3a6e26"/><rect x="2" y="9" width="2" height="2" fill="#4a3119"/><rect x="9" y="11" width="2" height="2" fill="#4a3119"/><rect x="6" y="8" width="2" height="2" fill="#4a3119"/></svg>
+      <span class="word">MobyMC</span>
+    </div>
+    <div class="lang-picker">
+      <button class="mc-btn" id="langBtn" onclick="toggleLangMenu()" aria-label="Language" style="font-size:14px;padding:9px 12px;">🌐</button>
+      <div class="lang-menu" id="langMenu">
+        <button onclick="setLanguage('ar')">العربية</button>
+        <button onclick="setLanguage('en')">English</button>
+      </div>
+    </div>
+    <div class="search-wrap" id="searchWrap">
+      <input id="searchInput" type="text" placeholder="ابحث عن مود، مطور، أو وسم..." onkeydown="if(event.key==='Enter')doSearch()" onfocus="openSearchFilters()">
+      <button class="mc-btn" id="searchFilterToggle" onclick="toggleSearchFilters()" title="فلاتر البحث"><i data-lucide="sliders-horizontal" class="icon-sm"></i></button>
+      <button class="mc-btn" onclick="doSearch()"><i data-lucide="search" class="icon-sm"></i> بحث</button>
+      <div class="search-filters-panel" id="searchFiltersPanel">
+        <label>نسخة اللعبة</label>
+        <select id="filterMcVersion" onchange="onFilterChange()"><option value="">كل نسخ ماين كرافت</option></select>
+        <label>التقييم</label>
+        <select id="filterRating" onchange="onFilterChange()">
+          <option value="0">كل التقييمات</option>
+          <option value="4">4 نجوم فأكثر</option>
+          <option value="3">3 نجوم فأكثر</option>
+          <option value="2">2 نجوم فأكثر</option>
+        </select>
+        <div style="display:flex;gap:8px;margin-top:10px;">
+          <button class="mc-btn primary" style="flex:1;" onclick="doSearch();toggleSearchFilters(false)"><i data-lucide="search" class="icon-sm"></i> تطبيق</button>
+          <button class="mc-btn" id="clearFiltersBtn" style="display:none;" onclick="clearFilters()"><i data-lucide="x" class="icon-sm"></i> مسح</button>
+        </div>
+      </div>
+    </div>
+    <nav class="main-nav">
+      <button class="mc-btn" onclick="go('home')"><i data-lucide="home" class="icon-sm"></i> الرئيسية</button>
+      <button class="mc-btn user-only-nav-btn nav-hidden" onclick="resetUploadFormMode();go('upload')"><i data-lucide="upload-cloud" class="icon-sm"></i> رفع مود</button>
+      <button class="mc-btn user-only-nav-btn nav-hidden" onclick="go('profile')"><i data-lucide="user" class="icon-sm"></i> حسابي</button>
+      <button class="mc-btn auth-nav-btn" onclick="handleAuthNavClick()"><i data-lucide="log-in" class="icon-sm"></i> دخول / تسجيل</button>
+      <button class="mc-btn admin-nav-btn" onclick="go('admin')" style="display:none;"><i data-lucide="shield" class="icon-sm"></i> لوحة الإدارة</button>
+    </nav>
+  </div>
+</header>
+
+<nav class="bottom-nav" aria-label="التنقل السريع">
+  <div class="bottom-nav-inner">
+    <button data-page="home" onclick="go('home')"><span class="ic"><i data-lucide="home"></i></span>الرئيسية</button>
+    <button class="user-only-nav-btn nav-hidden" data-page="upload" onclick="resetUploadFormMode();go('upload')"><span class="ic"><i data-lucide="upload-cloud"></i></span>رفع مود</button>
+    <button class="user-only-nav-btn nav-hidden" data-page="profile" onclick="go('profile')"><span class="ic"><i data-lucide="user"></i></span>حسابي</button>
+    <button data-page="__sheet" onclick="toggleSheet()"><span class="ic"><i data-lucide="menu"></i></span>المزيد</button>
+  </div>
+</nav>
+<div class="sheet-overlay" id="sheetOverlay" onclick="toggleSheet()"></div>
+<div class="sheet" id="moreSheet">
+  <button class="mc-btn auth-nav-btn" onclick="toggleSheet();handleAuthNavClick()"><i data-lucide="key" class="icon-sm"></i> دخول / تسجيل</button>
+  <button class="mc-btn" onclick="toggleSheet();go('contact')" style="text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;"><i data-lucide="mail" class="icon-sm"></i> <span>تواصل مع صاحب الموقع</span></button>
+  <button class="mc-btn admin-nav-btn" onclick="toggleSheet();go('admin')" style="display:none;"><i data-lucide="shield" class="icon-sm"></i> لوحة الإدارة</button>
+</div>
+
+<div class="modal-overlay" id="editProfileOverlay" onclick="closeEditProfileModal()"></div>
+<div class="modal-card" id="editProfileModal" role="dialog" aria-modal="true">
+  <div class="modal-head">
+    <h3>تعديل البروفيل</h3>
+    <button type="button" class="modal-close" onclick="closeEditProfileModal()" title="إغلاق"><i data-lucide="x" class="icon-sm"></i></button>
+  </div>
+  <div class="modal-avatar-row">
+    <div class="avatar" id="modalAvatarWrap" style="width:64px;height:64px;position:relative;overflow:hidden;border-radius:50%;">
+      <img id="modalAvatarImg" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%;">
+    </div>
+    <button class="mc-btn" style="width:auto;" onclick="document.getElementById('avatarInput').click()"><i data-lucide="camera" class="icon-sm"></i> تغيير صورة البروفيل</button>
+  </div>
+  <div class="field full"><label>نبذة تعريفية (تظهر على بروفايلك العام)</label><textarea id="profileBio" placeholder="اكتب نبذة قصيرة عن نفسك وعن المودات اللي بتصنعها..." maxlength="300" style="min-height:70px;"></textarea></div>
+  <div class="field full"><label>رابط تواصل شخصي (اختياري)</label><input id="profileSocialLink" type="text" placeholder="مثلاً: https://www.instagram.com/username"></div>
+  <div style="display:flex;gap:8px;">
+    <button class="mc-btn primary" style="width:auto;" onclick="saveCreatorInfo()"><i data-lucide="save" class="icon-sm"></i> حفظ</button>
+    <button class="mc-btn" style="width:auto;" onclick="closeEditProfileModal()"><i data-lucide="x" class="icon-sm"></i> إلغاء</button>
+  </div>
+</div>
+
+<main>
+
+  <!-- ============ HOME ============ -->
+  <section id="page-home" class="page active">
+    <div class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow"><i data-lucide="hammer" class="icon-sm"></i> سوق مودات ماين كرافت المفتوح</span>
+        <h1>اصنع، شارك، والعب<br>عالمك الخاص من المودات</h1>
+        <p>MobyMC هو المكان الذي يجتمع فيه صنّاع المودات واللاعبون: أضف موداتك، اكتشف الجديد، وقيّم ما يستحق البقاء في عالمك.</p>
+        <div class="hero-actions">
+          <button class="mc-btn primary big" onclick="resetUploadFormMode();go('upload')"><i data-lucide="upload-cloud" class="icon-sm"></i> ارفع مودك الآن</button>
+          <button class="mc-btn big" onclick="document.getElementById('grid-latest').scrollIntoView({behavior:'smooth'})"><i data-lucide="compass" class="icon-sm"></i> استعرض المودات</button>
+        </div>
+        <div class="hero-stats">
+          <div><div class="n" id="heroStatMods">0</div><div class="l">مود منشور</div></div>
+          <div><div class="n" id="heroStatUsers">0</div><div class="l">صانع محتوى</div></div>
+          <div><div class="n" id="heroStatDownloads">0</div><div class="l">تحميل</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hotbar-wrap">
+      <div class="hotbar" id="categoryHotbar"></div>
+    </div>
+
+
+
+    <div class="section-title"><i data-lucide="sparkles" class="icon-md"></i> <span data-tx-static>المودات</span></div>
+    <div class="grid" id="grid-latest"></div>
+    <div class="pagination" id="pagination-latest"></div>
+  </section>
+
+  <!-- ============ MOD DETAIL ============ -->
+  <section id="page-mod" class="page">
+    <button class="mc-btn" onclick="go('home')"><i data-lucide="arrow-right" class="icon-sm"></i> رجوع</button>
+    <div class="mod-detail">
+      <div>
+        <div class="gallery-main">
+          <div id="modGalleryMain"><i data-lucide="image" class="icon-lg" style="width:52px;height:52px;"></i></div>
+          <button class="gallery-nav prev" id="galleryPrev" style="display:none;" onclick="galleryStep(1)"><i data-lucide="chevron-right"></i></button>
+          <button class="gallery-nav next" id="galleryNext" style="display:none;" onclick="galleryStep(-1)"><i data-lucide="chevron-left"></i></button>
+          <div class="gallery-dots" id="galleryDots"></div>
+        </div>
+        <div class="gallery-thumbs" id="modGalleryThumbs"></div>
+        <div class="video-embed" id="modVideoEmbed"><i data-lucide="video" class="icon-sm"></i> لا يوجد فيديو لهذا المود</div>
+
+        <div class="tabs">
+          <button class="mc-btn tab-btn seg-btn active" data-tab="desc" onclick="switchTab('desc')">الوصف</button>
+          <button class="mc-btn tab-btn seg-btn" data-tab="changelog" onclick="switchTab('changelog')">سجل التحديثات</button>
+          <button class="mc-btn tab-btn seg-btn" data-tab="comments" onclick="switchTab('comments')">التعليقات</button>
+        </div>
+
+        <div class="tab-content active" id="tab-desc"><div class="dark-panel" id="modDescription" data-tx style="white-space:pre-wrap;line-height:1.8;"></div></div>
+        <div class="tab-content" id="tab-changelog"><div id="modChangelog"></div></div>
+        <div class="tab-content" id="tab-comments">
+          <div class="dark-panel comment-form" style="margin-bottom:22px;">
+            <div class="field"><label>تقييمك</label><div class="stars" id="ratingStars"></div></div>
+            <textarea placeholder="اكتب تعليقك هنا..."></textarea>
+            <button class="mc-btn primary" style="margin-top:10px;width:auto;" onclick="addComment()">إرسال التعليق</button>
+          </div>
+          <div id="commentsList"></div>
+        </div>
+      </div>
+
+      <div class="info-side dark-panel">
+        <div class="title" id="modTitle" data-tx>اسم المود</div>
+        <div class="stat-row"><span><i data-lucide="user" class="icon-sm"></i> المطور</span><span id="modAuthor" style="cursor:pointer;" onclick="viewUserProfile(currentMod && currentMod.authorId)">-</span></div>
+        <div class="stat-row"><span><i data-lucide="tag" class="icon-sm"></i> الإصدار</span><span id="modVersion">-</span></div>
+        <div class="stat-row"><span><i data-lucide="gamepad-2" class="icon-sm"></i> نسخة ماين كرافت</span><span id="modMcVersion">-</span></div>
+        <div class="stat-row"><span><i data-lucide="download" class="icon-sm"></i> التحميلات</span><span id="modDownloads">-</span></div>
+        <div class="stat-row"><span><i data-lucide="eye" class="icon-sm"></i> المشاهدات</span><span id="modViews">-</span></div>
+        <div class="stat-row"><span><i data-lucide="star" class="icon-sm"></i> التقييم</span><span id="modRating">-</span></div>
+        <div class="tag-row" id="modTags"></div>
+        <div class="mod-actions-row">
+          <button class="mc-btn primary grow" onclick="downloadMod()"><i data-lucide="download" class="icon-sm"></i> تحميل المود</button>
+          <button class="mc-btn icon-only" id="modFavBtn" onclick="toggleFavorite(currentMod && currentMod.id)" title="إضافة للمفضلة"><i data-lucide="heart" class="icon-sm" id="modFavIcon"></i></button>
+          <button class="mc-btn icon-only" onclick="copyModLink()" title="نسخ رابط المود"><i data-lucide="link" class="icon-sm"></i></button>
+        </div>
+        <button class="mc-btn big" style="margin-top:10px;" onclick="reportMod()"><i data-lucide="flag" class="icon-sm"></i> <span>إبلاغ</span></button>
+        <div class="mod-actions-row" style="margin-top:10px;">
+          <button class="mc-btn big grow" id="modEditBtn" style="display:none;" onclick="editMod()"><i data-lucide="pencil" class="icon-sm"></i> تعديل مودي</button>
+          <button class="mc-btn danger big grow" id="modDeleteBtn" style="display:none;" onclick="deleteOwnMod()"><i data-lucide="trash-2" class="icon-sm"></i> حذف مودي</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ UPLOAD ============ -->
+  <section id="page-upload" class="page">
+    <div class="section-title" id="uploadPageTitle"><i data-lucide="upload-cloud" class="icon-md"></i> رفع مود جديد</div>
+    <p style="color:var(--muted);font-size:14px;margin-top:-10px;">يجب تسجيل الدخول أولًا لنشر مود — المود يُنشر باسم حسابك ويظهر للجميع بعد موافقة الإدارة.</p>
+
+    <div class="dark-panel">
+      <form onsubmit="submitMod(event)">
+        <div class="form-grid">
+          <div class="field"><label>اسم المود</label><input id="upName" required type="text" placeholder="مثال: Super Swords Addon"></div>
+          <div class="field"><label>الإصدار</label><input id="upVersion" required type="text" placeholder="مثال: v1.2.0"></div>
+          <div class="field"><label>نسخة ماين كرافت المدعومة</label><input id="upMcVersion" required type="text" placeholder="مثال: 1.21.x"></div>
+          <div class="field"><label>التصنيف</label><select id="uploadCategory"></select></div>
+          <div class="field full"><label>التاغات (افصل بفاصلة)</label><input id="upTags" type="text" placeholder="سيوف, أسلحة, تعديل تلقائي"></div>
+          <div class="field full">
+            <label>الوصف</label>
+            <div class="rte-toolbar" id="rteToolbar">
+              <button type="button" class="rte-btn" data-cmd="bold" onmousedown="event.preventDefault()" onclick="rteCmd('bold')" title="عريض">B</button>
+              <button type="button" class="rte-btn" data-cmd="italic" onmousedown="event.preventDefault()" onclick="rteCmd('italic')" title="مائل"><i>I</i></button>
+              <button type="button" class="rte-btn" data-cmd="underline" onmousedown="event.preventDefault()" onclick="rteCmd('underline')" title="تحته خط"><u>U</u></button>
+              <button type="button" class="rte-btn" data-cmd="strikeThrough" onmousedown="event.preventDefault()" onclick="rteCmd('strikeThrough')" title="يتوسطه خط"><s>S</s></button>
+              <div class="rte-sep"></div>
+              <button type="button" class="rte-btn" data-cmd="insertUnorderedList" onmousedown="event.preventDefault()" onclick="rteCmd('insertUnorderedList')" title="قائمة نقطية"><i data-lucide="list" class="icon-sm"></i></button>
+              <button type="button" class="rte-btn" data-cmd="insertOrderedList" onmousedown="event.preventDefault()" onclick="rteCmd('insertOrderedList')" title="قائمة مرقمة"><i data-lucide="list-ordered" class="icon-sm"></i></button>
+              <div class="rte-sep"></div>
+              <button type="button" class="rte-btn" data-cmd="justifyRight" onmousedown="event.preventDefault()" onclick="rteCmd('justifyRight')" title="محاذاة لليمين"><i data-lucide="align-right" class="icon-sm"></i></button>
+              <button type="button" class="rte-btn" data-cmd="justifyCenter" onmousedown="event.preventDefault()" onclick="rteCmd('justifyCenter')" title="توسيط"><i data-lucide="align-center" class="icon-sm"></i></button>
+              <button type="button" class="rte-btn" data-cmd="justifyLeft" onmousedown="event.preventDefault()" onclick="rteCmd('justifyLeft')" title="محاذاة لليسار"><i data-lucide="align-left" class="icon-sm"></i></button>
+              <div class="rte-sep"></div>
+              <div class="rte-colors">
+                <span class="rte-color" data-color="#ffffff" style="background:#ffffff" onmousedown="event.preventDefault()" onclick="rteColorCmd('#ffffff')" title="أبيض"></span>
+                <span class="rte-color" data-color="#ff5c5c" style="background:#ff5c5c" onmousedown="event.preventDefault()" onclick="rteColorCmd('#ff5c5c')" title="أحمر"></span>
+                <span class="rte-color" data-color="#57d675" style="background:#57d675" onmousedown="event.preventDefault()" onclick="rteColorCmd('#57d675')" title="أخضر"></span>
+                <span class="rte-color" data-color="#ffcf4d" style="background:#ffcf4d" onmousedown="event.preventDefault()" onclick="rteColorCmd('#ffcf4d')" title="ذهبي"></span>
+                <span class="rte-color" data-color="#6fa8ff" style="background:#6fa8ff" onmousedown="event.preventDefault()" onclick="rteColorCmd('#6fa8ff')" title="أزرق"></span>
+                <span class="rte-color" data-color="#b98cff" style="background:#b98cff" onmousedown="event.preventDefault()" onclick="rteColorCmd('#b98cff')" title="بنفسجي"></span>
+              </div>
+            </div>
+            <div id="upDesc" class="rte-editor" contenteditable="true" data-placeholder="اكتب وصفًا للمود..."></div>
+          </div>
+          <div class="field full">
+            <label>ملف المود (mcpack / mcaddon / zip)</label>
+            <label class="dropzone" for="upFile" id="upFileLabel"><i data-lucide="package" class="icon-md"></i> اضغط لاختيار الملف</label>
+            <input type="file" id="upFile" accept=".mcaddon,.mcpack,.zip" style="display:none;">
+          </div>
+          <div class="field full">
+            <label>الصور</label>
+            <label class="dropzone" for="upImages" id="upImagesLabel"><i data-lucide="image" class="icon-md"></i> اضغط لاختيار صورة أو أكثر</label>
+            <input type="file" id="upImages" accept="image/*" multiple style="display:none;">
+            <div id="upImagePreview" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;"></div>
+          </div>
+          <div class="field full"><label>رابط الفيديو (اختياري)</label><input id="upVideo" type="text" placeholder="رابط يوتيوب مثلاً"></div>
+        </div>
+        <button type="submit" class="mc-btn primary big"><i data-lucide="send" class="icon-sm"></i> نشر المود للمراجعة</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ AUTH ============ -->
+  <section id="page-auth" class="page">
+    <div class="auth-box dark-panel">
+      <div class="auth-tabs">
+        <button class="mc-btn seg-btn active" id="tabLoginBtn" onclick="switchAuth('login')"><i data-lucide="log-in" class="icon-sm"></i> تسجيل الدخول</button>
+        <button class="mc-btn seg-btn" id="tabRegisterBtn" onclick="switchAuth('register')"><i data-lucide="user-plus" class="icon-sm"></i> إنشاء حساب</button>
+      </div>
+      <div id="loginForm">
+        <div class="field"><label>البريد الإلكتروني</label><input id="loginEmail" type="email" autocomplete="email"></div>
+        <div class="field"><label>كلمة المرور</label><input id="loginPassword" type="password" autocomplete="current-password"></div>
+        <button class="mc-btn primary big" onclick="loginUser()"><i data-lucide="log-in" class="icon-sm"></i> دخول</button>
+      </div>
+      <div id="registerForm" style="display:none;">
+        <div class="field"><label>اسم المستخدم (يظهر للجميع)</label><input id="registerUsername" type="text" autocomplete="username"></div>
+        <div class="field"><label>البريد الإلكتروني</label><input id="registerEmail" type="email" autocomplete="email"></div>
+        <div class="field"><label>كلمة المرور (6 أحرف فأكثر)</label><input id="registerPassword" type="password" autocomplete="new-password"></div>
+        <button class="mc-btn purple big" onclick="registerUser()"><i data-lucide="user-plus" class="icon-sm"></i> إنشاء الحساب</button>
+      </div>
+      <p style="color:var(--muted);font-size:13px;margin-top:14px;margin-bottom:0;">
+        حساب حقيقي محفوظ على قاعدة بيانات Supabase — قد يُطلب منك تأكيد بريدك الإلكتروني قبل تسجيل الدخول.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ PROFILE ============ -->
+  <section id="page-profile" class="page">
+    <div id="profileLoggedOut" class="dark-panel" style="text-align:center;">
+      <p style="color:var(--muted);">لم تسجّل الدخول بعد. سجّل دخولك لترفع مودات وتديرها.</p>
+      <button class="mc-btn primary big" style="width:auto;margin:0 auto;" onclick="go('auth')"><i data-lucide="log-in" class="icon-sm"></i> تسجيل الدخول</button>
+    </div>
+    <div id="profileLoggedIn" style="display:none;">
+      <div class="dark-panel profile-card">
+        <button class="mc-btn edit-profile-btn" id="editProfileBtn" title="تعديل البروفيل" onclick="openEditProfileModal()"><i data-lucide="pencil" class="icon-sm"></i></button>
+        <div class="profile-head">
+          <div class="avatar" id="profileAvatarWrap" style="width:92px;height:92px;position:relative;overflow:hidden;">
+            <img id="profileAvatarImg" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%;">
+            <input type="file" id="avatarInput" accept="image/*" style="display:none;" onchange="uploadAvatar(event)">
+          </div>
+          <div class="profile-head-info">
+            <div class="title" id="profileName" style="font-weight:800;font-size:18px;">-</div>
+            <button class="mc-btn danger" onclick="logoutUser()"><i data-lucide="log-out" class="icon-sm"></i> تسجيل الخروج</button>
+          </div>
+        </div>
+        <div id="approvalNote" style="display:none;margin-top:14px;padding:12px;background:var(--panel-3);border:2px solid var(--gold);border-radius:var(--radius);color:var(--gold);font-size:14px;align-items:center;gap:8px;">
+          <i data-lucide="clock" class="icon-sm"></i> حسابك بانتظار موافقة الإدارة — لن تقدر تنشر مودات أو تعلّق حتى تتم الموافقة.
+        </div>
+        <div class="profile-stats">
+          <div><div class="num" id="profileModsCount">0</div><div class="lbl">مودات منشورة</div></div>
+          <div><div class="num" id="profilePendingCount">0</div><div class="lbl">قيد المراجعة</div></div>
+          <div><div class="num" id="profileDownloads">0</div><div class="lbl">تحميلات</div></div>
+          <div><div class="num" id="profileViews">0</div><div class="lbl">مشاهدات</div></div>
+        </div>
+        <button class="mc-btn" style="width:auto;margin-top:14px;" onclick="go('downloads')"><i data-lucide="download" class="icon-sm"></i> سجل التحميلات</button>
+      </div>
+      <div class="section-title"><i data-lucide="star" class="icon-md"></i> المفضلة</div>
+      <div class="grid" id="grid-favorites"></div>
+      <div class="section-title"><i data-lucide="package" class="icon-md"></i> مودات حسابي</div>
+      <div class="grid" id="grid-profile"></div>
+    </div>
+  </section>
+
+  <!-- ============ PUBLIC USER PROFILE (view any user) ============ -->
+  <section id="page-userprofile" class="page">
+    <button class="mc-btn" onclick="go('home')"><i data-lucide="arrow-right" class="icon-sm"></i> رجوع</button>
+    <div class="dark-panel">
+      <div class="profile-head">
+        <div class="avatar" id="userProfileAvatarWrap" style="width:92px;height:92px;border-radius:50%;overflow:hidden;">
+          <img id="userProfileAvatarImg" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:50%;">
+        </div>
+        <div>
+          <div class="title" id="userProfileName" style="font-weight:800;font-size:18px;">-</div>
+          <div style="color:var(--muted);">حساب على MobyMC</div>
+        </div>
+      </div>
+      <div class="profile-stats">
+        <div><div class="num" id="userProfileModsCount">0</div><div class="lbl">مودات منشورة</div></div>
+        <div><div class="num" id="userProfileDownloads">0</div><div class="lbl">إجمالي التحميلات</div></div>
+        <div><div class="num" id="userProfileViews">0</div><div class="lbl">إجمالي المشاهدات</div></div>
+      </div>
+      <p id="userProfileBio" data-tx style="color:var(--muted);margin-top:14px;display:none;white-space:pre-wrap;"></p>
+      <a id="userProfileSocialLink" href="#" target="_blank" rel="noopener" class="mc-btn" style="width:auto;margin-top:10px;display:none;text-decoration:none;align-items:center;gap:6px;"><i data-lucide="link" class="icon-sm"></i> <span>تواصل معه</span></a>
+    </div>
+    <div id="grid-userprofile-wrap"></div>
+  </section>
+
+  <!-- ============ ADMIN ============ -->
+  <section id="page-admin" class="page">
+    <div class="section-title"><i data-lucide="shield" class="icon-md"></i> لوحة الإدارة</div>
+    <p style="color:var(--muted);font-size:13px;margin-top:-10px;">
+      محمية فعليًا: الدخول لهذه الصفحة وأي إجراء إداري يُتحقق منه بقاعدة البيانات نفسها (role = admin) — مو بس بالواجهة.
+    </p>
+    <div class="admin-stats">
+      <div class="admin-stat"><div class="n" id="adminStatTotal">0</div><div class="l">إجمالي المودات المنشورة</div></div>
+      <div class="admin-stat"><div class="n" id="adminStatPending">0</div><div class="l">بانتظار الموافقة</div></div>
+      <div class="admin-stat"><div class="n" id="adminStatUsers">0</div><div class="l">الحسابات المسجّلة</div></div>
+      <div class="admin-stat"><div class="n" id="adminStatDownloads">0</div><div class="l">إجمالي التحميلات</div></div>
+      <div class="admin-stat"><div class="n" id="adminStatReports">0</div><div class="l">بلاغات بانتظار المراجعة</div></div>
+    </div>
+    <button class="mc-btn primary" style="margin-top:6px;" onclick="downloadBackup()"><i data-lucide="database-backup" class="icon-sm"></i> تنزيل نسخة احتياطية من البيانات</button>
+
+    <h3 style="font-size:15px;color:var(--green-light);margin-top:34px;">بلاغات بانتظار المراجعة</h3>
+    <table class="admin-table">
+      <thead><tr><th>المود المبلّغ عنه</th><th>السبب</th><th>إجراءات</th></tr></thead>
+      <tbody id="adminReportsTable"></tbody>
+    </table>
+    <h3 style="font-size:15px;color:var(--green-light);">حسابات بانتظار الموافقة</h3>
+    <table class="admin-table">
+      <thead><tr><th>اسم المستخدم</th><th>إجراءات</th></tr></thead>
+      <tbody id="adminPendingAccountsTable"></tbody>
+    </table>
+    <h3 style="font-size:15px;color:var(--green-light);margin-top:34px;">مودات بانتظار المراجعة</h3>
+    <table class="admin-table">
+      <thead><tr><th>اسم المود</th><th>المطور</th><th>التصنيف</th><th>الحالة</th><th>إجراءات</th></tr></thead>
+      <tbody id="adminPendingTable"></tbody>
+    </table>
+    <h3 style="font-size:15px;color:var(--green-light);margin-top:34px;">كل المودات المنشورة (حذف كامل)</h3>
+    <div class="admin-list-pager" id="adminAllModsList"></div>
+    <div class="admin-list-nav">
+      <button type="button" class="mc-btn pager-arrow" onclick="pagerNav('adminAllModsList','adminAllModsDots',1)" title="السابق"><i data-lucide="chevron-right" class="icon-sm"></i></button>
+      <div class="admin-list-dots" id="adminAllModsDots"></div>
+      <button type="button" class="mc-btn pager-arrow" onclick="pagerNav('adminAllModsList','adminAllModsDots',-1)" title="التالي"><i data-lucide="chevron-left" class="icon-sm"></i></button>
+    </div>
+    <h3 style="font-size:15px;color:var(--green-light);margin-top:34px;">الحسابات المسجّلة فعليًا</h3>
+    <p style="color:var(--muted);font-size:13px;margin-top:-6px;">حذف الحساب يحذف مودّاته كلها معه (المرتبطة به) — لا يمكن التراجع.</p>
+    <div class="admin-list-pager" id="adminUsersList"></div>
+    <div class="admin-list-dots" id="adminUsersDots"></div>
+  </section>
+
+  <!-- ============ DOWNLOAD HISTORY (محلي على هذا الجهاز) ============ -->
+  <section id="page-downloads" class="page">
+    <button class="mc-btn" onclick="go('profile')"><i data-lucide="arrow-right" class="icon-sm"></i> رجوع</button>
+    <div class="section-title"><i data-lucide="download" class="icon-md"></i> سجل التحميلات</div>
+    <div id="downloadsHistoryList"></div>
+    <button class="mc-btn" style="margin-top:14px;" onclick="clearDownloadHistory()"><i data-lucide="trash-2" class="icon-sm"></i> مسح السجل</button>
+  </section>
+
+  <!-- ============ CONTACT US ============ -->
+  <section id="page-contact" class="page">
+    <button class="mc-btn" onclick="go('home')"><i data-lucide="arrow-right" class="icon-sm"></i> رجوع</button>
+    <div class="section-title"><i data-lucide="mail" class="icon-md"></i> تواصل معنا</div>
+    <div class="dark-panel" style="text-align:center;display:flex;flex-direction:column;align-items:center;gap:14px;">
+      <p style="color:var(--muted);max-width:420px;">
+        عندك سؤال، اقتراح، أو مشكلة بمود رفعته؟ تواصل مباشرة مع صاحب الموقع عبر إنستغرام.
+      </p>
+      <a class="mc-btn primary big" href="https://www.instagram.com/amineamin6525?igsh=b3A2Y2txeGJjbnMx" target="_blank" rel="noopener" style="text-decoration:none;display:inline-flex;align-items:center;gap:8px;">
+        <i data-lucide="instagram" class="icon-sm"></i> راسلنا على إنستغرام
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="fnote">MobyMC</div>
+  صُنع بحب لمجتمع ماين كرافت ⛏️ — MobyMC © 2026
+</footer>
+
+<div id="toast"></div>
+
+<script>
+/* ============ SUPABASE CONNECTION ============ */
+const SUPABASE_URL = 'https://hwswalwbolyavbgptcsb.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_m2XlTsVzJgsUc7hMf9FPeA_90X22pC8';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/* ============ STATIC TAXONOMY ============ */
+const CATEGORIES = [
+  {name:"الكل",icon:"layout-grid"},{name:"Survival",icon:"axe"},{name:"PvP",icon:"swords"},
+  {name:"العوالم",icon:"globe"},{name:"UI",icon:"app-window"},
+  {name:"Resource Packs",icon:"palette"},{name:"Add-ons",icon:"puzzle"}
+];
+
+/* ============ FILE / UPLOAD PROTECTION ============ */
+const ALLOWED_MOD_EXT = ['mcpack','mcaddon','zip'];
+const ALLOWED_IMG_EXT = ['png','jpg','jpeg','webp','gif'];
+const MAX_MOD_FILE_MB = 60;
+const MAX_IMG_MB = 8;
+const MAX_IMAGES = 6;
+// Dangerous extensions blocked everywhere, even hidden behind a second extension
+// (e.g. "cool_mod.mcaddon.exe") — checked against every dot-segment in the filename, not just the last one.
+const BLOCKED_EXTENSIONS = ['exe','bat','cmd','sh','msi','scr','com','pif','vbs','vbe','js','jse','wsf','wsh','ps1','ps1xml','psc1','psm1','jar','apk','app','deb','rpm','dll','sys','dmg','pkg','gadget','lnk','reg','html','htm','svg','php','py'];
+function getExt(filename){ return (filename.split('.').pop()||'').toLowerCase(); }
+function hasBlockedExtensionAnywhere(filename){
+  const parts = String(filename||'').toLowerCase().split('.').slice(1);
+  return parts.some(p => BLOCKED_EXTENSIONS.includes(p));
+}
+function validateModFile(file){
+  if(!file) return {ok:true};
+  const ext = getExt(file.name);
+  if(hasBlockedExtensionAnywhere(file.name)) return {ok:false, msg: ss('نوع هذا الملف غير مسموح به لأسباب أمنية')};
+  if(!ALLOWED_MOD_EXT.includes(ext)) return {ok:false, msg: ssf('نوع الملف غير مسموح: .{0} — الأنواع المسموحة: mcpack, mcaddon, zip', ext)};
+  if(file.size > MAX_MOD_FILE_MB*1024*1024) return {ok:false, msg: ssf('حجم ملف المود أكبر من {0} ميجا المسموح بها', MAX_MOD_FILE_MB)};
+  return {ok:true};
+}
+function validateImages(files){
+  if(files.length > MAX_IMAGES) return {ok:false, msg: ssf('الحد الأقصى للصور هو {0}', MAX_IMAGES)};
+  for(const file of files){
+    const ext = getExt(file.name);
+    if(hasBlockedExtensionAnywhere(file.name)) return {ok:false, msg: ss('نوع هذا الملف غير مسموح به لأسباب أمنية')};
+    if(!ALLOWED_IMG_EXT.includes(ext) || !file.type.startsWith('image/')) return {ok:false, msg: ssf('نوع صورة غير مسموح: .{0}', ext)};
+    if(file.size > MAX_IMG_MB*1024*1024) return {ok:false, msg: ssf('حجم إحدى الصور أكبر من {0} ميجا المسموح بها', MAX_IMG_MB)};
+  }
+  return {ok:true};
+}
+
+function formatCount(n){
+  n = Number(n)||0;
+  if(n>=1000000) return (n/1000000).toFixed(1).replace(/\.0$/,'')+'M';
+  if(n>=1000) return (n/1000).toFixed(1).replace(/\.0$/,'')+'K';
+  return String(n);
+}
+function modRatingAvg(m){ return m.ratingCount ? (m.ratingSum/m.ratingCount).toFixed(1) : '—'; }
+// كشف المتصفحات المدمجة داخل تطبيقات (ماسنجر، تيليجرام، إنستغرام...) — هذي المتصفحات
+// مقيدة أمنيًا وتتسبب أحيانًا بشاشة سوداء عند رفع الملفات، فنعرض تنبيهًا لفتح الموقع بمتصفح حقيقي.
+function isInAppBrowser(){
+  const ua = navigator.userAgent || '';
+  return /FBAN|FBAV|Instagram|Line\/|Telegram|TelegramBot|Messenger|MicroMessenger|Twitter/i.test(ua);
+}
+function checkInAppBrowser(){
+  if(isInAppBrowser()){
+    const el = document.getElementById('inAppWarning');
+    if(el) el.style.display = 'block';
+  }
+}
+function refreshIcons(){ if(window.lucide) lucide.createIcons(); }
+
+// Tracks which mod IDs this device has already counted as a "view", so re-opening
+// the same mod from the same browser doesn't inflate the view counter.
+function hasDeviceViewed(modId){
+  try{
+    const seen = JSON.parse(localStorage.getItem('mobymc_viewed_mods') || '[]');
+    return seen.includes(modId);
+  } catch(e){ return false; }
+}
+function markDeviceViewed(modId){
+  try{
+    const seen = JSON.parse(localStorage.getItem('mobymc_viewed_mods') || '[]');
+    if(!seen.includes(modId)){
+      seen.push(modId);
+      // keep the list from growing forever — 500 most recent mods is plenty
+      if(seen.length > 500) seen.splice(0, seen.length - 500);
+      localStorage.setItem('mobymc_viewed_mods', JSON.stringify(seen));
+    }
+  } catch(e){ /* localStorage unavailable — worst case a device gets re-counted, harmless */ }
+}
+
+/* ============ SECURITY HELPERS ============ */
+// Escape any user-supplied text before it goes into innerHTML, to block stored XSS
+// (someone naming a mod <img onerror=...> or similar).
+function escapeHtml(str){
+  return String(str==null?'':str).replace(/[&<>"']/g, ch => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[ch]));
+}
+// Small blue "verified" checkmark badge shown next to trusted developer usernames.
+function verifiedBadge(isVerified){
+  return isVerified ? ' <i data-lucide="badge-check" class="icon-sm" style="color:#3ba8ff;vertical-align:-3px;" title="'+ss('حساب موثّق')+'"></i>' : '';
+}
+// Only allow http/https links for video URLs etc — blocks javascript:, data:, vbscript: XSS payloads.
+function isSafeUrl(url){
+  if(!url) return false;
+  try{ const u = new URL(url, location.href); return u.protocol==='http:' || u.protocol==='https:'; }
+  catch(e){ return false; }
+}
+// Very small client-side throttle to slow down spam-clicking (comments, reports, uploads, signup).
+const _actionTimestamps = {};
+function isRateLimited(key, minGapMs){
+  const now = Date.now();
+  const last = _actionTimestamps[key] || 0;
+  if(now - last < minGapMs) return true;
+  _actionTimestamps[key] = now;
+  return false;
+}
+
+/* ============ i18n (Arabic / English) ============ */
+let currentLang = localStorage.getItem('mobymc_lang') || 'ar';
+const STATIC_I18N = {
+  "ابحث عن مود، مطور، أو وسم...":"Search for a mod, developer, or tag...",
+  "رابط يوتيوب مثلاً":"e.g. a YouTube link","سيوف, أسلحة, تعديل تلقائي":"swords, weapons, tweaks",
+  "الأكثر تحميلاً":"Most Downloaded","مود مميز هذا الأسبوع":"Featured mod this week",
+  "الرئيسية":"Home","رفع مود":"Upload Mod","حسابي":"My Account","دخول / تسجيل":"Log In / Sign Up",
+  "تسجيل الخروج":"Log Out","لوحة الإدارة":"Admin Panel","المزيد":"More","بحث":"Search","رجوع":"Back",
+  "المودات":"Mods","مود منشور":"Mods Published","صانع محتوى":"Creators","تحميل":"Downloads","الكل":"All","العوالم":"Worlds",
+  "إغلاق":"Close","تغيير صورة البروفيل":"Change Profile Picture",
+  "تعديل البروفيل":"Edit Profile",
+  "نبذة تعريفية (تظهر على بروفايلك العام)":"Bio (shown on your public profile)",
+  "اكتب نبذة قصيرة عن نفسك وعن المودات اللي بتصنعها...":"Write a short bio about yourself and the mods you make...",
+  "رابط تواصل شخصي (اختياري)":"Personal contact link (optional)",
+  "مثلاً: https://www.instagram.com/username":"e.g.: https://www.instagram.com/username",
+  "حفظ":"Save","إلغاء":"Cancel",
+  "نُشر في":"Published on",
+  "سوق مودات ماين كرافت المفتوح":"An open Minecraft mod marketplace",
+  "اصنع، شارك، والعب":"Create, share, and play",
+  "عالمك الخاص من المودات":"your own world of mods",
+  "MobyMC هو المكان الذي يجتمع فيه صنّاع المودات واللاعبون: أضف موداتك، اكتشف الجديد، وقيّم ما يستحق البقاء في عالمك.":
+    "MobyMC is where mod creators and players meet: add your mods, discover new ones, and rate what deserves to stay in your world.",
+  "ارفع مودك الآن":"Upload Your Mod Now","استعرض المودات":"Browse Mods","عرض المود":"View Mod",
+  "الأكثر تحميلاً":"Most Downloaded","رجوع":"Back",
+  "الوصف":"Description","سجل التحديثات":"Changelog","التعليقات":"Comments",
+  "تقييمك":"Your Rating","إرسال التعليق":"Submit Comment","اكتب تعليقك هنا...":"Write your comment here...",
+  "المطور":"Developer","الإصدار":"Version","نسخة ماين كرافت":"Minecraft Version","التحميلات":"Downloads","التقييم":"Rating",
+  "تحميل المود (.mcaddon)":"Download Mod (.mcaddon)","تحميل المود":"Download Mod","تعديل مودي":"Edit My Mod","حذف مودي":"Delete My Mod",
+  "لا يوجد فيديو لهذا المود":"No video for this mod","لا توجد تعليقات بعد. كن أول من يعلّق!":"No comments yet. Be the first to comment!",
+  "لا توجد مودات في هذا التصنيف بعد — كن أول من ينشر!":"No mods in this category yet — be the first to publish!",
+  "قيد المراجعة":"Under Review","رفع مود جديد":"Upload New Mod","تعديل مودك":"Edit Your Mod",
+  "يجب تسجيل الدخول أولًا لنشر مود — المود يُنشر باسم حسابك ويظهر للجميع بعد موافقة الإدارة.":
+    "You must log in first to publish a mod — it will be published under your account and shown to everyone after admin approval.",
+  "اسم المود":"Mod Name","نسخة ماين كرافت المدعومة":"Supported Minecraft Version","التصنيف":"Category",
+  "التاغات (افصل بفاصلة)":"Tags (comma-separated)","الصور":"Images","رابط الفيديو (اختياري)":"Video Link (optional)",
+  "ملف المود (mcpack / mcaddon / zip)":"Mod File (mcpack / mcaddon / zip)","اضغط لاختيار الملف":"Tap to choose file",
+  "اضغط لاختيار صورة أو أكثر":"Tap to choose one or more images","اكتب وصفًا للمود...":"Write a description for the mod...",
+  "نشر المود للمراجعة":"Submit Mod for Review","حفظ التعديلات":"Save Changes",
+  "تسجيل الدخول":"Log In","إنشاء حساب":"Sign Up","اسم المستخدم":"Username","اسم المستخدم (يظهر للجميع)":"Username (public)",
+  "البريد الإلكتروني":"Email","كلمة المرور":"Password","كلمة المرور (6 أحرف فأكثر)":"Password (6+ characters)","دخول":"Log In",
+  "إنشاء الحساب":"Create Account",
+  "حساب حقيقي محفوظ على قاعدة بيانات Supabase — قد يُطلب منك تأكيد بريدك الإلكتروني قبل تسجيل الدخول.":
+    "A real account stored on the Supabase database — you may be asked to confirm your email before logging in.",
+  "لم تسجّل الدخول بعد. سجّل دخولك لترفع مودات وتديرها.":"You haven't logged in yet. Log in to publish and manage mods.",
+  "حساب حقيقي على MobyMC":"A real MobyMC account","مودات منشورة":"Published Mods","قيد المراجعة":"Under Review",
+  "تحميلات":"Downloads","مودات حسابي":"My Mods",
+  "حسابك بانتظار موافقة الإدارة — لن تقدر تنشر مودات أو تعلّق حتى تتم الموافقة.":
+    "Your account is awaiting admin approval — you can't publish mods or comment until approved.",
+  "محمية فعليًا: الدخول لهذه الصفحة وأي إجراء إداري يُتحقق منه بقاعدة البيانات نفسها (role = admin) — مو بس بالواجهة.":
+    "Actually protected: access to this page and any admin action is verified by the database itself (role = admin) — not just the interface.",
+  "إجمالي المودات المنشورة":"Total Published Mods","بانتظار الموافقة":"Awaiting Approval","الحسابات المسجّلة":"Registered Accounts",
+  "إجمالي التحميلات":"Total Downloads","حسابات بانتظار الموافقة":"Accounts Awaiting Approval",
+  "المشاهدات":"Views",
+  "إجمالي المشاهدات":"Total Views",
+  "أخرى":"Other",
+  "تواصل معه":"Contact them",
+  "✅ تم حفظ بياناتك":"✅ Your info was saved",
+  "⚠️ رابط التواصل يجب أن يبدأ بـ http أو https":"⚠️ The contact link must start with http or https",
+  "حساب موثّق":"Verified Account",
+  "توثيق":"Verify",
+  "إلغاء التوثيق":"Unverify",
+  "✅ تم توثيق الحساب":"✅ Account verified",
+  "تم إلغاء توثيق الحساب":"Verification removed",
+  "حساب على MobyMC":"A MobyMC account",
+  "مودات هذا المستخدم":"This User's Mods",
+  "لا توجد مودات منشورة لهذا المستخدم بعد":"This user hasn't published any mods yet",
+  "⏳ جاري رفع الصورة...":"⏳ Uploading photo...",
+  "✅ تم تحديث صورة البروفايل":"✅ Profile picture updated",
+  "⚠️ تعذّر العثور على هذا الحساب":"⚠️ Couldn't find this account",
+  "مودات بانتظار المراجعة":"Mods Awaiting Review","كل المودات المنشورة (حذف كامل)":"All Published Mods (Full Delete)",
+  "الحسابات المسجّلة فعليًا":"Actually Registered Accounts",
+  "حذف الحساب يحذف مودّاته كلها معه (المرتبطة به) — لا يمكن التراجع.":
+    "Deleting an account also deletes all its mods — this cannot be undone.",
+  "اسم المستخدم":"Username","الدور":"Role","عدد المودات":"Mods Count","إجراءات":"Actions",
+  "اسم المود":"Mod Name","المطور":"Developer","التصنيف":"Category","الحالة":"Status","التحميلات":"Downloads",
+  "موافقة":"Approve","حذف":"Delete",
+  "لا توجد مودات بانتظار المراجعة 🎉":"No mods awaiting review 🎉","لا توجد مودات منشورة":"No published mods",
+  "لا يوجد حسابات مسجّلة بعد":"No accounts registered yet","لا توجد حسابات بانتظار الموافقة 🎉":"No accounts awaiting approval 🎉",
+  "صُنع بحب لمجتمع ماين كرافت ⛏️ — MobyMC © 2026":"Made with love for the Minecraft community ⛏️ — MobyMC © 2026",
+  "لا توجد وسوم":"No tags","لا يوجد سجل تحديثات بعد.":"No changelog yet.",
+  "تواصل مع صاحب الموقع":"Contact the Site Owner",
+  "تواصل معنا":"Contact Us",
+  "عندك سؤال، اقتراح، أو مشكلة بمود رفعته؟ تواصل مباشرة مع صاحب الموقع عبر إنستغرام.":"Have a question, suggestion, or an issue with a mod you uploaded? Reach out directly to the site owner on Instagram.",
+  "راسلنا على إنستغرام":"Message us on Instagram",
+  "⚠️ نوع هذا الملف غير مسموح به لأسباب أمنية":"⚠️ This file type isn't allowed for security reasons",
+  "نوع هذا الملف غير مسموح به لأسباب أمنية":"This file type isn't allowed for security reasons",
+  "⚠️ يُسمح فقط بملفات mcpack أو mcaddon أو zip":"⚠️ Only mcpack, mcaddon, or zip files are allowed",
+  "⚠️ حجم ملف المود أكبر من الحد المسموح (100MB)":"⚠️ The mod file exceeds the allowed size (100MB)",
+  "⚠️ الصور يجب أن تكون بصيغة png أو jpg أو gif أو webp":"⚠️ Images must be png, jpg, gif, or webp",
+  "⚠️ حجم إحدى الصور أكبر من الحد المسموح (8MB)":"⚠️ One of the images exceeds the allowed size (8MB)",
+  "⚠️ فيه مود منشور بنفس الاسم مسبقًا — جرّب اسمًا مختلفًا":"⚠️ A mod with this name already exists — try a different name",
+  "⏳ تمهّل شوي قبل ما تجرب مرة ثانية":"⏳ Slow down a bit before trying again",
+  "⚠️ رابط الفيديو غير صالح — يجب أن يبدأ بـ http أو https":"⚠️ Invalid video link — it must start with http or https",
+  "🚩 الإبلاغ عن المود":"🚩 Report Mod",
+  "اكتب سبب البلاغ (مثلاً: محتوى مخالف، رابط لا يعمل، انتحال...)":"Describe the reason for reporting (e.g. inappropriate content, broken link, impersonation...)",
+  "يرجى كتابة سبب البلاغ":"Please write a reason for the report",
+  "✅ تم إرسال بلاغك، شكرًا لمساعدتك بحماية المجتمع":"✅ Your report was submitted, thanks for helping keep the community safe",
+  "⚠️ تعذّر إرسال البلاغ، حاول لاحقًا":"⚠️ Couldn't submit the report, please try again later",
+  "إبلاغ":"Report",
+  "نسخ رابط المود":"Copy Mod Link",
+  "البلاغات":"Reports",
+  "بلاغات بانتظار المراجعة":"Reports Awaiting Review",
+  "لا توجد بلاغات 🎉":"No reports 🎉",
+  "السبب":"Reason",
+  "المود المبلّغ عنه":"Reported Mod",
+  "تجاهل البلاغ":"Dismiss",
+  "حذف المود":"Delete Mod",
+  "✅ تم تجاهل البلاغ":"✅ Report dismissed",
+  "نسخة احتياطية":"Backup",
+  "تنزيل نسخة احتياطية من البيانات":"Download a Data Backup",
+  "⏳ جاري تجهيز النسخة الاحتياطية...":"⏳ Preparing the backup...",
+  "✅ تم تنزيل النسخة الاحتياطية":"✅ Backup downloaded",
+  /* ---- toasts / confirms / dynamic UI strings ---- */
+  "مستخدم محذوف":"Deleted User",
+  "يرجى تعبئة كل الحقول":"Please fill in all fields",
+  "كلمة المرور لازم 6 أحرف على الأقل":"Password must be at least 6 characters",
+  "✅ تم إنشاء حسابك وتسجيل الدخول":"✅ Your account was created and you're logged in",
+  "📧 تم إنشاء الحساب — تفقد بريدك الإلكتروني لتأكيده ثم سجّل دخولك":"📧 Account created — check your email to confirm it, then log in",
+  "يرجى إدخال البريد وكلمة المرور":"Please enter your email and password",
+  "✅ تم تسجيل الدخول":"✅ Logged in",
+  "تم تسجيل الخروج":"Logged out",
+  "⚠️ تعذّر تحميل المودات: ":"⚠️ Couldn't load mods: ",
+  "لا توجد مودات بعد — جرّب رفع أول مود لك من \"رفع مود\"!":"No mods yet — try uploading your first mod from \"Upload Mod\"!",
+  "هل أنت متأكد من حذف \"{0}\"؟ لا يمكن التراجع.":"Are you sure you want to delete \"{0}\"? This cannot be undone.",
+  "🗑️ تم حذف مودك":"🗑️ Your mod was deleted",
+  "🚫 هذه الصفحة مخصّصة للإدارة فقط":"🚫 This page is for admins only",
+  "اكتب اسم مود للبحث عنه":"Enter a mod name to search for",
+  "لم يتم العثور على مود بهذا الاسم":"No mod found with that name",
+  "المود غير موجود أو لا تملك صلاحية رؤيته":"This mod doesn't exist or you don't have permission to view it",
+  "لا يوجد تقييم بعد":"No rating yet",
+  "فتح رابط الفيديو":"Open video link",
+  "🔗 تم نسخ رابط المود":"🔗 Mod link copied",
+  "انسخ الرابط يدويًا:":"Copy the link manually:",
+  "📦 لا يوجد ملف حزمة مرفوع لهذا المود بعد":"📦 No package file has been uploaded for this mod yet",
+  "📦 جاري تحميل ":"📦 Downloading ",
+  " ...":" ...",
+  "⚠️ سجّل الدخول أولًا لتقييم أو التعليق":"⚠️ Log in first to rate or comment",
+  "⚠️ حسابك بانتظار موافقة الإدارة قبل ما تقدر تعلّق":"⚠️ Your account is awaiting admin approval before you can comment",
+  "اكتب تعليقًا أولاً":"Write a comment first",
+  "✅ تم إضافة تعليقك وتحديث التقييم":"✅ Your comment was added and the rating updated",
+  " (اترك فارغًا للإبقاء عليه)":" (leave empty to keep it)",
+  "⚠️ يجب تسجيل الدخول أولًا لنشر مود":"⚠️ You must log in first to publish a mod",
+  "⚠️ حسابك بانتظار موافقة الإدارة قبل ما تقدر تنشر":"⚠️ Your account is awaiting admin approval before you can publish",
+  "يرجى تعبئة الحقول المطلوبة (الاسم، الإصدار، النسخة، الوصف)":"Please fill in the required fields (name, version, Minecraft version, description)",
+  "⚠️ لا تملك صلاحية تعديل هذا المود":"⚠️ You don't have permission to edit this mod",
+  "⏳ جاري الرفع...":"⏳ Uploading...",
+  "✅ تم حفظ التعديلات — المود رجع لقائمة المراجعة":"✅ Changes saved — the mod is back in the review queue",
+  "📤 تم إرسال مودك للمراجعة — تابع حالته من \"حسابي\"":"📤 Your mod was submitted for review — track its status from \"My Account\"",
+  "⚠️ فشل: ":"⚠️ Failed: ",
+  "خطأ غير معروف":"Unknown error",
+  "✅ تمت الموافقة على الحساب":"✅ Account approved",
+  "حذف حساب \"{0}\" نهائيًا؟ كل مودّاته تُحذف معه — لا يمكن التراجع.":"Permanently delete the account \"{0}\"? All their mods will be deleted with it — this cannot be undone.",
+  "⚠️ الجلسة انتهت، سجّل الدخول من جديد":"⚠️ Your session expired, please log in again",
+  "فشل الحذف":"Delete failed",
+  "🗑️ تم حذف الحساب نهائيًا":"🗑️ Account permanently deleted",
+  "✅ تمت الموافقة على \"{0}\" — أصبح ظاهرًا للجميع الآن":"✅ Approved \"{0}\" — it's now visible to everyone",
+  "🗑️ تم حذف \"{0}\" المخالف":"🗑️ Deleted the violating mod \"{0}\"",
+  "🗑️ تم حذف المود المخالف":"🗑️ Deleted the violating mod",
+  "حذف \"{0}\" نهائيًا لكل الزوار؟":"Permanently delete \"{0}\" for all visitors?",
+  "🗑️ تم حذف \"{0}\" نهائيًا":"🗑️ Permanently deleted \"{0}\"",
+  /* ---- protection / reports ---- */
+  "نوع الملف غير مسموح: .{0} — الأنواع المسموحة: mcpack, mcaddon, zip":"File type not allowed: .{0} — allowed types: mcpack, mcaddon, zip",
+  "حجم ملف المود أكبر من {0} ميجا المسموح بها":"The mod file exceeds the allowed {0} MB limit",
+  "الحد الأقصى للصور هو {0}":"The maximum number of images is {0}",
+  "نوع صورة غير مسموح: .{0}":"Image type not allowed: .{0}",
+  "حجم إحدى الصور أكبر من {0} ميجا المسموح بها":"One of the images exceeds the allowed {0} MB limit",
+  "⚠️ يوجد مود بنفس الاسم منشور مسبقًا — جرّب اسمًا مختلفًا":"⚠️ A mod with this name already exists — try a different name",
+  "⏳ الرجاء الانتظار قليلاً قبل رفع مود آخر":"⏳ Please wait a bit before uploading another mod",
+  "⏳ الرجاء الانتظار قليلاً قبل إرسال تعليق آخر":"⏳ Please wait a bit before posting another comment",
+  "الإبلاغ عن هذا المود":"Report This Mod",
+  "اكتب سبب الإبلاغ عن هذا المود:":"Write the reason for reporting this mod:",
+  "✅ تم إرسال بلاغك، شكرًا لمساعدتك بحماية المجتمع":"✅ Your report was submitted — thanks for helping keep the community safe",
+  "⚠️ سجّل الدخول أولًا للإبلاغ عن مود":"⚠️ Log in first to report a mod",
+  "البلاغات قيد المراجعة":"Reports Pending Review",
+  "المود":"Mod","السبب":"Reason","تجاهل":"Dismiss","حذف المود":"Delete Mod",
+  "لا توجد بلاغات قيد المراجعة 🎉":"No reports pending review 🎉",
+  "✅ تم تجاهل البلاغ":"✅ Report dismissed",
+  /* ---- filters / search / similar / favorites / download history ---- */
+  "تصفح المودات":"Browse All Mods",
+  "كل نسخ ماين كرافت":"All Minecraft Versions",
+  "كل التقييمات":"All Ratings",
+  "4 نجوم فأكثر":"4 stars & up","3 نجوم فأكثر":"3 stars & up","2 نجوم فأكثر":"2 stars & up",
+  "مسح الفلاتر":"Clear Filters","مسح":"Clear","تطبيق":"Apply",
+  "نسخة اللعبة":"Game Version","التقييم":"Rating",
+  "لا توجد نتائج مطابقة لبحثك أو الفلاتر المختارة":"No results match your search or selected filters",
+  "المفضلة":"Favorites","إضافة للمفضلة":"Add to Favorites","إزالة من المفضلة":"Remove from Favorites",
+  "✅ تمت الإضافة للمفضلة":"✅ Added to favorites","تمت الإزالة من المفضلة":"Removed from favorites",
+  "⚠️ سجّل الدخول أولًا لإضافة مودات للمفضلة":"⚠️ Log in first to add favorites",
+  "لا توجد مودات في المفضلة بعد":"No favorite mods yet",
+  "سجل التحميلات":"Download History",
+  "مسح السجل":"Clear History",
+  "⚠️ سجّل الدخول أولًا لعرض سجل تحميلاتك":"⚠️ Log in first to view your download history",
+  "تعذّر تحميل السجل":"Couldn't load your history",
+  "لا يوجد تحميلات بعد":"No downloads yet",
+};
+const STATIC_I18N_REV = Object.fromEntries(Object.entries(STATIC_I18N).map(([a,e])=>[e,a]));
+function ss(key){ return currentLang==='en' ? (STATIC_I18N[key] || key) : key; }
+function ssf(template, ...vals){
+  let t = currentLang==='en' ? (STATIC_I18N[template] || template) : template;
+  vals.forEach((v,i)=>{ t = t.replace('{'+i+'}', v); });
+  return t;
+}
+
+function applyStaticTextSwap(){
+  const dict = currentLang==='en' ? STATIC_I18N : STATIC_I18N_REV;
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+  const nodes = [];
+  let n; while(n = walker.nextNode()) nodes.push(n);
+  nodes.forEach(node=>{
+    const trimmed = node.nodeValue.trim();
+    if(trimmed && dict[trimmed]){
+      node.nodeValue = node.nodeValue.replace(trimmed, dict[trimmed]);
+    }
+  });
+  // placeholders
+  const placeholderMap = currentLang==='en' ? STATIC_I18N : STATIC_I18N_REV;
+  document.querySelectorAll('input[placeholder], textarea[placeholder]').forEach(el=>{
+    const p = el.getAttribute('placeholder');
+    if(placeholderMap[p]) el.setAttribute('placeholder', placeholderMap[p]);
+  });
+  // data-label attributes (used for responsive table headers on mobile)
+  document.querySelectorAll('[data-label]').forEach(el=>{
+    const l = el.getAttribute('data-label');
+    if(placeholderMap[l]) el.setAttribute('data-label', placeholderMap[l]);
+  });
+}
+
+/* ---- dynamic (user-generated) content translation via free MyMemory API ---- */
+const translationCache = new Map();
+function looksArabic(text){ return /[\u0600-\u06FF]/.test(text||''); }
+async function fetchTranslation(text){
+  if(!text || !looksArabic(text)) return text;
+  if(translationCache.has(text)) return translationCache.get(text);
+  try{
+    const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=ar|en`);
+    const data = await res.json();
+    const translated = (data && data.responseData && data.responseData.translatedText) || text;
+    translationCache.set(text, translated);
+    return translated;
+  }catch(e){ return text; }
+}
+async function translateDynamicContent(){
+  if(currentLang!=='en') return;
+  const nodes = Array.from(document.querySelectorAll('[data-tx]'));
+  for(const node of nodes){
+    const original = node.textContent;
+    if(!looksArabic(original)) continue;
+    const translated = await fetchTranslation(original);
+    if(currentLang==='en') node.textContent = translated;
+  }
+}
+
+async function rerenderCurrentView(){
+  const activePage = document.querySelector('.page.active');
+  if(!activePage) return;
+  if(activePage.id==='page-home'){ renderHotbar(); renderGrids(); }
+  if(activePage.id==='page-profile'){ renderProfile(); }
+  if(activePage.id==='page-admin'){ renderAdmin(); }
+  if(activePage.id==='page-mod' && currentMod){ await openMod(currentMod.id); }
+}
+async function applyLanguage(){
+  document.documentElement.lang = currentLang;
+  document.documentElement.dir = currentLang==='ar' ? 'rtl' : 'ltr';
+  localStorage.setItem('mobymc_lang', currentLang);
+  await rerenderCurrentView();
+  applyStaticTextSwap();
+  refreshIcons();
+  translateDynamicContent();
+}
+function toggleLangMenu(){ document.getElementById('langMenu').classList.toggle('open'); }
+function setLanguage(lang){
+  currentLang = lang;
+  applyLanguage();
+  document.getElementById('langMenu').classList.remove('open');
+}
+document.addEventListener('click', (e)=>{
+  const picker = document.querySelector('.lang-picker');
+  if(picker && !picker.contains(e.target)) document.getElementById('langMenu').classList.remove('open');
+});
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.display='block';
+  clearTimeout(showToast._t); showToast._t=setTimeout(()=>t.style.display='none',2800);
+}
+
+/* ============ STATE ============ */
+let MODS = [];
+let currentUser = null;   // {id, email, username, role, approved}
+let currentMod = null;
+let currentCategory = "الكل";
+let selectedRating = 5;
+let editingModId = null;
+let galleryIndex = 0;
+const PAGE_SIZE = 10;
+let pageLatest = 1;
+let currentSearchQuery = '';
+let FAVORITES = new Set();
+
+/* ============ NORMALIZE A DB ROW → APP SHAPE ============ */
+function normalizeMod(row){
+  return {
+    id: row.id,
+    name: row.name,
+    author: (row.author && row.author.username) || ss('مستخدم محذوف'),
+    authorVerified: !!(row.author && row.author.verified),
+    authorAvatar: (row.author && row.author.avatar_url) || '',
+    authorId: row.author_id,
+    createdAt: row.created_at,
+    version: row.version,
+    mcVersion: row.mc_version,
+    cat: row.category,
+    tags: row.tags || [],
+    desc: row.description,
+    videoUrl: row.video_url,
+    images: row.images || [],
+    fileUrl: row.file_url,
+    fileName: row.file_name,
+    status: row.status,
+    downloads: row.downloads || 0,
+    views: row.views || 0,
+    ratingSum: row.rating_sum || 0,
+    ratingCount: row.rating_count || 0,
+    changelog: [{v: row.version, note: 'الإصدار الأول.'}],
+    comments: []
+  };
+}
+
+/* ============ AUTH ============ */
+async function loadCurrentUserProfile(authUser){
+  const { data, error } = await sb.from('profiles').select('*').eq('id', authUser.id).single();
+  if(error || !data){ currentUser = { id: authUser.id, email: authUser.email, username: authUser.email, role:'user', approved:false, avatarUrl:null, verified:false, bio:'', socialLink:'' }; }
+  else { currentUser = { id: authUser.id, email: authUser.email, username: data.username, role: data.role, approved: !!data.approved, avatarUrl: data.avatar_url || null, verified: !!data.verified, bio: data.bio || '', socialLink: data.social_link || '' }; }
+  await loadFavorites();
+}
+function switchAuth(which){
+  document.getElementById('loginForm').style.display = which==='login' ? 'block':'none';
+  document.getElementById('registerForm').style.display = which==='register' ? 'block':'none';
+  document.getElementById('tabLoginBtn').classList.toggle('active', which==='login');
+  document.getElementById('tabRegisterBtn').classList.toggle('active', which==='register');
+}
+async function registerUser(){
+  const username = document.getElementById('registerUsername').value.trim();
+  const email = document.getElementById('registerEmail').value.trim();
+  const password = document.getElementById('registerPassword').value;
+  if(!username || !email || !password){ showToast(ss('يرجى تعبئة كل الحقول')); return; }
+  if(password.length < 6){ showToast(ss('كلمة المرور لازم 6 أحرف على الأقل')); return; }
+
+  const { data, error } = await sb.auth.signUp({
+    email, password, options: { data: { username } }
+  });
+  if(error){ showToast('⚠️ '+error.message); return; }
+
+  if(data.session){
+    await loadCurrentUserProfile(data.user);
+    refreshAuthNav();
+    showToast(ss('✅ تم إنشاء حسابك وتسجيل الدخول'));
+    go('profile');
+  } else {
+    showToast(ss('📧 تم إنشاء الحساب — تفقد بريدك الإلكتروني لتأكيده ثم سجّل دخولك'));
+    switchAuth('login');
+  }
+}
+async function loginUser(){
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  if(!email || !password){ showToast(ss('يرجى إدخال البريد وكلمة المرور')); return; }
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  if(error){ showToast('⚠️ '+error.message); return; }
+  await loadCurrentUserProfile(data.user);
+  refreshAuthNav();
+  showToast(ss('✅ تم تسجيل الدخول'));
+  go('profile');
+}
+async function logoutUser(){
+  await sb.auth.signOut();
+  currentUser = null;
+  FAVORITES = new Set();
+  refreshAuthNav();
+  showToast(ss('تم تسجيل الخروج'));
+  go('home');
+}
+function handleAuthNavClick(){
+  if(currentUser) logoutUser(); else go('auth');
+}
+function refreshAuthNav(){
+  document.querySelectorAll('.auth-nav-btn').forEach(b=>{
+    b.innerHTML = currentUser
+      ? `<i data-lucide="log-out" class="icon-sm"></i> ${ss('تسجيل الخروج')}`
+      : `<i data-lucide="log-in" class="icon-sm"></i> ${ss('دخول / تسجيل')}`;
+  });
+  document.querySelectorAll('.user-only-nav-btn').forEach(b=>{
+    b.classList.toggle('nav-hidden', !currentUser);
+  });
+  const isAdmin = !!(currentUser && currentUser.role==='admin');
+  document.querySelectorAll('.admin-nav-btn').forEach(b=>{
+    b.style.display = isAdmin ? 'inline-flex' : 'none';
+  });
+  refreshIcons();
+}
+
+/* ============ FETCH MODS (RLS decides what each viewer can see) ============ */
+async function refreshMods(){
+  const { data, error } = await sb.from('mods')
+    .select('*, author:profiles(username, verified, avatar_url)')
+    .order('created_at', { ascending:false });
+  if(error){ showToast(ss('⚠️ تعذّر تحميل المودات: ')+error.message); MODS=[]; return; }
+  MODS = data.map(normalizeMod);
+}
+
+/* ============ CARDS / GRID ============ */
+function formatModDate(iso){
+  if(!iso) return '';
+  const d = new Date(iso);
+  if(isNaN(d)) return '';
+  return d.toLocaleDateString(currentLang==='en' ? 'en-US' : 'ar-EG-u-nu-latn', {day:'numeric', month:'long', year:'numeric'});
+}
+function modCard(m){
+  const thumb = (m.images && m.images.length)
+    ? `<img src="${m.images[0]}" style="width:100%;height:100%;object-fit:cover;">`
+    : `<i data-lucide="package" style="width:44px;height:44px;"></i>`;
+  const pendingNote = m.status==='pending' ? `<div style="display:flex;align-items:center;gap:6px;color:var(--gold);font-size:13px;font-weight:700;"><i data-lucide="clock" class="icon-sm"></i> ${ss('قيد المراجعة')}</div>` : '';
+  const isFav = FAVORITES.has(m.id);
+  const avatar = m.authorAvatar ? `<img src="${m.authorAvatar}">` : `<i data-lucide="user"></i>`;
+  const tagsHtml = (m.tags||[]).slice(0,3).map(t=>`<span class="tag">${escapeHtml(t)}</span>`).join('');
+  const shortDesc = twoSentences(stripHtml(m.desc||''));
+  const dateStr = formatModDate(m.createdAt);
+  return `<div class="mod-card" onclick="openMod(${m.id})">
+    <div class="card-author-row">
+      <div class="card-author-left" onclick="event.stopPropagation();viewUserProfile('${m.authorId}')">
+        <div class="card-avatar">${avatar}</div>
+        <div class="card-author-text">
+          <span class="card-author-name">${escapeHtml(m.author)}${verifiedBadge(m.authorVerified)}</span>
+          ${dateStr ? `<span class="card-author-date">${ss('نُشر في')} ${dateStr}</span>` : ''}
+        </div>
+      </div>
+      <div class="card-stats">
+        <div class="stats-top-row">
+          <span class="stat-pill rating"><i data-lucide="star" class="icon-sm"></i> ${modRatingAvg(m)}</span>
+          <span class="stat-pill downloads"><i data-lucide="download" class="icon-sm"></i> ${formatCount(m.downloads)}</span>
+        </div>
+        <span class="stat-pill views"><i data-lucide="eye" class="icon-sm"></i> ${formatCount(m.views)}</span>
+      </div>
+    </div>
+    <div class="mod-thumb">
+      <span class="badge">${escapeHtml(m.cat||'')}</span>
+      <div class="fav-star-btn ${isFav?'active':''}" onclick="event.stopPropagation();toggleFavorite(${m.id})" title="${ss('إضافة للمفضلة')}"><i data-lucide="heart" class="icon-sm"></i></div>
+      ${thumb}
+    </div>
+    <div class="mod-body">
+      ${tagsHtml ? `<div class="card-tags">${tagsHtml}</div>` : ''}
+      <div class="name" data-tx>${escapeHtml(m.name)}</div>
+      ${shortDesc ? `<div class="card-desc" data-tx>${escapeHtml(shortDesc)}</div>` : ''}
+      ${pendingNote}
+    </div>
+  </div>`;
+}
+function twoSentences(text){
+  if(!text) return '';
+  const parts = text.split(/(?<=[.!؟?])\s+/).filter(Boolean);
+  return parts.slice(0,2).join(' ');
+}
+
+/* ============ FAVORITES ============ */
+async function loadFavorites(){
+  FAVORITES = new Set();
+  if(!currentUser) return;
+  const { data, error } = await sb.from('favorites').select('mod_id').eq('user_id', currentUser.id);
+  if(!error && data) FAVORITES = new Set(data.map(r=>r.mod_id));
+}
+async function toggleFavorite(id){
+  if(!id) return;
+  if(!currentUser){ showToast(ss('⚠️ سجّل الدخول أولًا لإضافة مودات للمفضلة')); go('auth'); return; }
+  const isFav = FAVORITES.has(id);
+  if(isFav){
+    const { error } = await sb.from('favorites').delete().eq('user_id', currentUser.id).eq('mod_id', id);
+    if(!error){ FAVORITES.delete(id); showToast(ss('تمت الإزالة من المفضلة')); }
+  } else {
+    const { error } = await sb.from('favorites').insert({ user_id: currentUser.id, mod_id: id });
+    if(!error){ FAVORITES.add(id); showToast(ss('✅ تمت الإضافة للمفضلة')); }
+    else { showToast('⚠️ '+error.message); return; }
+  }
+  renderGrids();
+  updateModFavBtn();
+  const profilePage = document.getElementById('page-profile');
+  if(profilePage && profilePage.classList.contains('active')) renderFavoritesGrid();
+}
+function updateModFavBtn(){
+  const icon = document.getElementById('modFavIcon');
+  const btn = document.getElementById('modFavBtn');
+  if(!icon || !btn || !currentMod) return;
+  const isFav = FAVORITES.has(currentMod.id);
+  btn.title = ss(isFav ? 'إزالة من المفضلة' : 'إضافة للمفضلة');
+  icon.style.color = isFav ? 'var(--red)' : '';
+  icon.style.fill = isFav ? 'var(--red)' : 'none';
+  if(isFav){ icon.style.animation='none'; void icon.offsetWidth; icon.style.animation='heartPop .3s var(--ease)'; }
+}
+function renderFavoritesGrid(){
+  const wrap = document.getElementById('grid-favorites');
+  if(!wrap) return;
+  const favMods = MODS.filter(m=>m.status==='published' && FAVORITES.has(m.id));
+  wrap.innerHTML = favMods.map(modCard).join('') || '<p style="color:var(--muted)">'+ss('لا توجد مودات في المفضلة بعد')+'</p>';
+  refreshIcons();
+}
+
+/* ============ DOWNLOAD HISTORY (خاص بكل حساب — Supabase) ============ */
+async function addToDownloadHistory(m){
+  if(!currentUser) return; // السجل خاص بالحسابات المسجّلة فقط
+  try{
+    await sb.from('download_history').upsert({
+      user_id: currentUser.id,
+      mod_id: m.id,
+      mod_name: m.name,
+      mod_image: (m.images && m.images[0]) || null,
+      mod_cat: m.cat || '',
+      mod_mc_version: m.mcVersion || '',
+      downloaded_at: new Date().toISOString()
+    }, { onConflict: 'user_id,mod_id' });
+  } catch(e){ /* فشل تسجيل السجل غير حرِج — ما يوقفش التحميل */ }
+}
+async function clearDownloadHistory(){
+  if(!currentUser) return;
+  await sb.from('download_history').delete().eq('user_id', currentUser.id);
+  renderDownloadsHistory();
+}
+async function renderDownloadsHistory(){
+  const wrap = document.getElementById('downloadsHistoryList');
+  if(!wrap) return;
+  if(!currentUser){
+    wrap.innerHTML = '<p style="color:var(--muted);text-align:center;">'+ss('⚠️ سجّل الدخول أولًا لعرض سجل تحميلاتك')+'</p>';
+    return;
+  }
+  const { data, error } = await sb.from('download_history')
+    .select('*').eq('user_id', currentUser.id).order('downloaded_at', { ascending:false });
+  if(error){
+    wrap.innerHTML = '<p style="color:var(--muted);text-align:center;">'+ss('تعذّر تحميل السجل')+'</p>';
+    return;
+  }
+  const hist = data || [];
+  wrap.innerHTML = hist.map(h=>{
+    const thumb = h.mod_image ? `<img src="${h.mod_image}">` : '<i data-lucide="package" class="icon-md"></i>';
+    const sub = [h.mod_cat, h.mod_mc_version].filter(Boolean).join(' • ');
+    return `<div class="dl-row" onclick="openMod(${h.mod_id})">
+      <div class="dl-thumb">${thumb}</div>
+      <div class="dl-info">
+        <div class="dl-name" data-tx>${escapeHtml(h.mod_name)}</div>
+        ${sub ? `<div class="dl-sub">${escapeHtml(sub)}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('') || '<p style="color:var(--muted);text-align:center;">'+ss('لا يوجد تحميلات بعد')+'</p>';
+  refreshIcons();
+}
+
+
+function renderHotbar(){
+  const wrap = document.getElementById('categoryHotbar');
+  wrap.innerHTML = CATEGORIES.map((c)=>`
+    <button class="cat-chip ${c.name===currentCategory?'active':''}" onclick="filterCat('${c.name}')"><span class="chip-icon"><i data-lucide="${c.icon}" class="icon-sm"></i></span> ${ss(c.name)}</button>`).join('');
+  refreshIcons();
+}
+function filterCat(c){ currentCategory=c; pageLatest=1; renderHotbar(); renderGrids(); }
+
+function renderPagination(containerId, totalItems, currentPage, onPage){
+  const el = document.getElementById(containerId);
+  const totalPages = Math.max(1, Math.ceil(totalItems / PAGE_SIZE));
+  if(totalPages <= 1){ el.innerHTML = ''; return; }
+  let html = '';
+  html += `<button class="mc-btn" ${currentPage<=1?'disabled':''} onclick="${onPage}(${currentPage-1})"><i data-lucide="chevron-right"></i></button>`;
+  for(let p=1; p<=totalPages; p++){
+    html += `<button class="mc-btn ${p===currentPage?'active':''}" onclick="${onPage}(${p})">${p}</button>`;
+  }
+  html += `<button class="mc-btn" ${currentPage>=totalPages?'disabled':''} onclick="${onPage}(${currentPage+1})"><i data-lucide="chevron-left"></i></button>`;
+  el.innerHTML = html;
+}
+function goPageLatest(p){ pageLatest = p; renderGrids(); document.getElementById('grid-latest').scrollIntoView({behavior:'smooth', block:'start'}); }
+
+/* ---- version/rating dropdown filters + search, combined ---- */
+function populateVersionFilter(){
+  const sel = document.getElementById('filterMcVersion');
+  if(!sel) return;
+  const current = sel.value;
+  const versions = Array.from(new Set(MODS.filter(m=>m.status==='published' && m.mcVersion).map(m=>m.mcVersion))).sort();
+  sel.innerHTML = '<option value="">'+ss('كل نسخ ماين كرافت')+'</option>' + versions.map(v=>`<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join('');
+  if(versions.includes(current)) sel.value = current;
+}
+function currentFilters(){
+  const verSel = document.getElementById('filterMcVersion');
+  const ratSel = document.getElementById('filterRating');
+  return {
+    q: currentSearchQuery || '',
+    mcVersion: verSel ? verSel.value : '',
+    minRating: Number(ratSel ? ratSel.value : 0)
+  };
+}
+function applyFilters(list){
+  const f = currentFilters();
+  return list.filter(m=>{
+    if(f.mcVersion && m.mcVersion !== f.mcVersion) return false;
+    if(f.minRating > 0){
+      const avg = m.ratingCount ? (m.ratingSum/m.ratingCount) : 0;
+      if(avg < f.minRating) return false;
+    }
+    if(f.q){
+      const hay = (m.name+' '+m.author+' '+(m.tags||[]).join(' ')).toLowerCase();
+      if(!hay.includes(f.q)) return false;
+    }
+    return true;
+  });
+}
+function onFilterChange(){ pageLatest = 1; renderGrids(); }
+function openSearchFilters(){ document.getElementById('searchFiltersPanel').classList.add('open'); }
+function toggleSearchFilters(force){
+  const panel = document.getElementById('searchFiltersPanel');
+  if(typeof force === 'boolean'){ panel.classList.toggle('open', force); }
+  else { panel.classList.toggle('open'); }
+}
+document.addEventListener('click', (e)=>{
+  const wrap = document.getElementById('searchWrap');
+  const panel = document.getElementById('searchFiltersPanel');
+  if(wrap && panel && panel.classList.contains('open') && !wrap.contains(e.target)){
+    panel.classList.remove('open');
+  }
+});
+function clearFilters(){
+  const verSel = document.getElementById('filterMcVersion');
+  const ratSel = document.getElementById('filterRating');
+  if(verSel) verSel.value = '';
+  if(ratSel) ratSel.value = '0';
+  currentSearchQuery = '';
+  document.getElementById('searchInput').value = '';
+  pageLatest = 1;
+  renderGrids();
+}
+
+function renderGrids(){
+  populateVersionFilter();
+  const published = MODS.filter(m=>m.status==='published');
+  const byCategory = currentCategory==="الكل" ? published : published.filter(m=>m.cat===currentCategory);
+
+  const filtered = applyFilters(byCategory);
+  const totalPagesLatest = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  pageLatest = Math.min(pageLatest, totalPagesLatest);
+  const latestSlice = filtered.slice((pageLatest-1)*PAGE_SIZE, pageLatest*PAGE_SIZE);
+  document.getElementById('grid-latest').innerHTML = latestSlice.map(modCard).join('') || '<p style="color:var(--muted)">'+ss('لا توجد نتائج مطابقة لبحثك أو الفلاتر المختارة')+'</p>';
+  renderPagination('pagination-latest', filtered.length, pageLatest, 'goPageLatest');
+
+  const clearBtn = document.getElementById('clearFiltersBtn');
+  if(clearBtn){
+    const f = currentFilters();
+    clearBtn.style.display = (f.q || f.mcVersion || f.minRating>0) ? 'inline-flex' : 'none';
+  }
+
+  document.getElementById('heroStatMods').textContent = formatCount(published.length);
+  document.getElementById('heroStatDownloads').textContent = formatCount(published.reduce((s,m)=>s+(m.downloads||0),0));
+  refreshIcons();
+}
+
+
+/* ============ PROFILE ============ */
+function renderProfile(){
+  const loggedOut = document.getElementById('profileLoggedOut');
+  const loggedIn = document.getElementById('profileLoggedIn');
+  if(!currentUser){
+    loggedOut.style.display = 'block';
+    loggedIn.style.display = 'none';
+    return;
+  }
+  loggedOut.style.display = 'none';
+  loggedIn.style.display = 'block';
+  document.getElementById('profileName').innerHTML = escapeHtml(currentUser.username) + verifiedBadge(currentUser.verified);
+  const avImg = document.getElementById('profileAvatarImg');
+  const modalAvImg = document.getElementById('modalAvatarImg');
+  if(currentUser.avatarUrl){
+    avImg.src = currentUser.avatarUrl; avImg.style.display = 'block';
+    modalAvImg.src = currentUser.avatarUrl; modalAvImg.style.display = 'block';
+  } else {
+    avImg.style.display = 'none'; avImg.removeAttribute('src');
+    modalAvImg.style.display = 'none'; modalAvImg.removeAttribute('src');
+  }
+  document.getElementById('approvalNote').style.display = currentUser.approved ? 'none' : 'flex';
+  const mine = MODS.filter(m=>m.authorId===currentUser.id);
+  const published = mine.filter(m=>m.status==='published');
+  const pending = mine.filter(m=>m.status==='pending');
+  document.getElementById('profileModsCount').textContent = published.length;
+  document.getElementById('profilePendingCount').textContent = pending.length;
+  document.getElementById('profileDownloads').textContent = formatCount(published.reduce((s,m)=>s+(m.downloads||0),0));
+  document.getElementById('profileViews').textContent = formatCount(published.reduce((s,m)=>s+(m.views||0),0));
+  document.getElementById('profileBio').value = currentUser.bio || '';
+  document.getElementById('profileSocialLink').value = currentUser.socialLink || '';
+  document.getElementById('grid-profile').innerHTML = mine.length
+    ? mine.map(profileModCard).join('')
+    : '<p style="color:var(--muted)">'+ss('لا توجد مودات بعد — جرّب رفع أول مود لك من "رفع مود"!')+'</p>';
+  renderFavoritesGrid();
+  refreshIcons();
+}
+function openEditProfileModal(){
+  const modal = document.getElementById('editProfileModal');
+  const overlay = document.getElementById('editProfileOverlay');
+  if(!modal || !overlay) return;
+  modal.classList.add('open');
+  overlay.classList.add('open');
+}
+function closeEditProfileModal(){
+  const modal = document.getElementById('editProfileModal');
+  const overlay = document.getElementById('editProfileOverlay');
+  if(!modal || !overlay) return;
+  modal.classList.remove('open');
+  overlay.classList.remove('open');
+}
+async function saveCreatorInfo(){
+  if(!currentUser) return;
+  const bio = document.getElementById('profileBio').value.trim().slice(0, 300);
+  const socialLink = document.getElementById('profileSocialLink').value.trim();
+  if(socialLink && !isSafeUrl(socialLink)){ showToast(ss('⚠️ رابط التواصل يجب أن يبدأ بـ http أو https')); return; }
+  const { error } = await sb.from('profiles').update({ bio, social_link: socialLink || null }).eq('id', currentUser.id);
+  if(error){ showToast('⚠️ '+error.message); return; }
+  currentUser.bio = bio;
+  currentUser.socialLink = socialLink;
+  showToast(ss('✅ تم حفظ بياناتك'));
+  closeEditProfileModal();
+}
+async function uploadAvatar(e){
+  const file = e.target.files[0];
+  e.target.value = '';
+  if(!file || !currentUser) return;
+  const check = validateImages([file]);
+  if(!check.ok){ showToast(check.msg); return; }
+  try{
+    showToast(ss('⏳ جاري رفع الصورة...'));
+    const path = `${currentUser.id}/avatar_${Date.now()}_${sanitizeFileName(file.name)}`;
+    const { error: upErr } = await sb.storage.from('mod-images').upload(path, file);
+    if(upErr) throw upErr;
+    const { data: pub } = sb.storage.from('mod-images').getPublicUrl(path);
+    const { error: dbErr } = await sb.from('profiles').update({ avatar_url: pub.publicUrl }).eq('id', currentUser.id);
+    if(dbErr) throw dbErr;
+    currentUser.avatarUrl = pub.publicUrl;
+    renderProfile();
+    showToast(ss('✅ تم تحديث صورة البروفايل'));
+  } catch(err){
+    showToast(ss('⚠️ فشل: ')+(err.message||ss('خطأ غير معروف')));
+  }
+}
+async function viewUserProfile(userId){
+  if(!userId) return;
+  const { data: profile, error } = await sb.from('profiles').select('*').eq('id', userId).single();
+  if(error || !profile){ showToast(ss('⚠️ تعذّر العثور على هذا الحساب')); return; }
+  const theirMods = MODS.filter(m=>m.authorId===userId && m.status==='published');
+  document.getElementById('userProfileName').innerHTML = escapeHtml(profile.username) + verifiedBadge(profile.verified);
+  const avImg = document.getElementById('userProfileAvatarImg');
+  if(profile.avatar_url){ avImg.src = profile.avatar_url; avImg.style.display='block'; }
+  else { avImg.style.display='none'; avImg.removeAttribute('src'); }
+  document.getElementById('userProfileModsCount').textContent = theirMods.length;
+  document.getElementById('userProfileDownloads').textContent = formatCount(theirMods.reduce((s,m)=>s+(m.downloads||0),0));
+  document.getElementById('userProfileViews').textContent = formatCount(theirMods.reduce((s,m)=>s+(m.views||0),0));
+
+  const bioEl = document.getElementById('userProfileBio');
+  if(profile.bio){ bioEl.textContent = profile.bio; bioEl.style.display = 'block'; }
+  else { bioEl.style.display = 'none'; }
+
+  const linkEl = document.getElementById('userProfileSocialLink');
+  if(profile.social_link && isSafeUrl(profile.social_link)){ linkEl.href = profile.social_link; linkEl.style.display = 'inline-flex'; }
+  else { linkEl.style.display = 'none'; linkEl.removeAttribute('href'); }
+
+  // group this creator's mods by category so their profile reads like a mini-catalogue
+  const wrap = document.getElementById('grid-userprofile-wrap');
+  if(!theirMods.length){
+    wrap.innerHTML = '<p style="color:var(--muted)">'+ss('لا توجد مودات منشورة لهذا المستخدم بعد')+'</p>';
+  } else {
+    const byCat = {};
+    theirMods.forEach(m=>{ const k = m.cat || ss('أخرى'); (byCat[k] = byCat[k]||[]).push(m); });
+    wrap.innerHTML = Object.keys(byCat).map(cat => `
+      <div class="section-title" style="font-size:16px;margin-top:22px;"><i data-lucide="folder" class="icon-sm"></i> ${escapeHtml(ss(cat))}</div>
+      <div class="grid">${byCat[cat].map(modCard).join('')}</div>
+    `).join('');
+  }
+  go('userprofile');
+  refreshIcons();
+}
+function profileModCard(m){
+  const statusNote = m.status==='pending'
+    ? `<div style="display:flex;align-items:center;gap:6px;color:var(--gold);font-size:13px;font-weight:700;padding:0 14px 10px;"><i data-lucide="clock" class="icon-sm"></i> ${ss('قيد المراجعة')}</div>`
+    : '';
+  return `<div style="position:relative;">
+    ${modCard(m)}
+    ${statusNote}
+    <button class="mc-btn danger" style="position:absolute;top:10px;left:10px;padding:6px 10px;font-size:12px;" onclick="event.stopPropagation();deleteMyMod(${m.id})"><i data-lucide="trash-2" class="icon-sm"></i></button>
+  </div>`;
+}
+async function deleteMyMod(id){
+  const m = MODS.find(x=>x.id===id);
+  if(!m) return;
+  if(!confirm(ssf('هل أنت متأكد من حذف "{0}"؟ لا يمكن التراجع.', m.name))) return;
+  const { error } = await sb.from('mods').delete().eq('id', id);
+  if(error){ showToast('⚠️ '+error.message); return; }
+  await refreshMods();
+  renderProfile(); renderGrids();
+  showToast(ss('🗑️ تم حذف مودك'));
+}
+async function deleteOwnMod(){
+  if(!currentMod) return;
+  if(!confirm(ssf('هل أنت متأكد من حذف "{0}"؟ لا يمكن التراجع.', currentMod.name))) return;
+  const { error } = await sb.from('mods').delete().eq('id', currentMod.id);
+  if(error){ showToast('⚠️ '+error.message); return; }
+  await refreshMods();
+  renderGrids();
+  showToast(ss('🗑️ تم حذف مودك'));
+  go('profile');
+}
+
+/* ============ NAVIGATION ============ */
+async function go(page){
+  if(page==='admin' && (!currentUser || currentUser.role!=='admin')){
+    showToast(ss('🚫 هذه الصفحة مخصّصة للإدارة فقط'));
+    page = 'home';
+  }
+  if(page==='downloads' && !currentUser){
+    showToast(ss('⚠️ سجّل الدخول أولًا لعرض سجل تحميلاتك'));
+    page = 'auth';
+  }
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  document.querySelectorAll('.bottom-nav-inner button').forEach(b=>b.classList.toggle('active', b.dataset.page===page));
+
+  if(page!=='mod' && new URLSearchParams(location.search).has('mod')){
+    history.pushState({}, '', location.pathname);
+  }
+
+  if(page==='home'){ await refreshMods(); renderGrids(); }
+  if(page==='profile'){ await refreshMods(); renderProfile(); }
+  if(page==='downloads'){ renderDownloadsHistory(); }
+  if(page==='admin'){ await refreshMods(); renderAdmin(); }
+
+  if(currentLang==='en'){ applyStaticTextSwap(); refreshIcons(); translateDynamicContent(); }
+}
+window.addEventListener('popstate', ()=>{
+  const modId = new URLSearchParams(location.search).get('mod');
+  if(modId){ openMod(Number(modId)); } else { go('home'); }
+});
+function toggleSheet(){
+  document.getElementById('moreSheet').classList.toggle('open');
+  document.getElementById('sheetOverlay').classList.toggle('open');
+}
+async function doSearch(){
+  currentSearchQuery = document.getElementById('searchInput').value.trim().toLowerCase();
+  pageLatest = 1;
+  await go('home');
+  document.getElementById('grid-latest').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+/* ============ MOD DETAIL ============ */
+async function openMod(id){
+  let m = MODS.find(x=>x.id===id);
+  if(!m){
+    const { data, error } = await sb.from('mods').select('*, author:profiles(username, verified)').eq('id', id).single();
+    if(error || !data){ showToast(ss('المود غير موجود أو لا تملك صلاحية رؤيته')); return; }
+    m = normalizeMod(data);
+  }
+  currentMod = m;
+
+  const { data: comments } = await sb.from('comments').select('*').eq('mod_id', id).order('created_at', {ascending:true});
+  currentMod.comments = comments || [];
+
+  document.getElementById('modTitle').textContent = m.name;
+  document.getElementById('modAuthor').innerHTML = escapeHtml(m.author) + verifiedBadge(m.authorVerified);
+  document.getElementById('modVersion').textContent = m.version || '-';
+  document.getElementById('modMcVersion').textContent = m.mcVersion || '-';
+  document.getElementById('modDownloads').textContent = formatCount(m.downloads);
+  document.getElementById('modViews').textContent = formatCount(m.views);
+  document.getElementById('modRating').textContent = m.ratingCount ? (modRatingAvg(m)+' / 5') : ss('لا يوجد تقييم بعد');
+  document.getElementById('modDescription').innerHTML = sanitizeDescHtml(m.desc || '');
+
+  // count a view once per device only (not once per page open) — track seen mod IDs in localStorage
+  if(!hasDeviceViewed(m.id)){
+    sb.rpc('increment_mod_views', { target_mod_id: m.id }).then(({error})=>{
+      if(!error){
+        m.views = (m.views||0) + 1;
+        document.getElementById('modViews').textContent = formatCount(m.views);
+        markDeviceViewed(m.id);
+      }
+    });
+  }
+
+  const imgs = m.images || [];
+  galleryIndex = 0;
+  renderGalleryMain();
+  document.getElementById('modGalleryThumbs').innerHTML = imgs.length ? imgs.map((src,i)=>`<div class="${i===0?'active':''}" onclick="setGalleryIndex(${i})" style="background-image:url('${src}')"></div>`).join('') : '';
+  document.getElementById('galleryPrev').style.display = imgs.length>1 ? 'flex' : 'none';
+  document.getElementById('galleryNext').style.display = imgs.length>1 ? 'flex' : 'none';
+  document.getElementById('galleryDots').innerHTML = imgs.length>1 ? imgs.map((_,i)=>`<span class="${i===0?'active':''}"></span>`).join('') : '';
+
+  const videoBox = document.getElementById('modVideoEmbed');
+  const ytMatch = (m.videoUrl||'').match(/(?:youtu\.be\/|watch\?v=|embed\/)([a-zA-Z0-9_-]{6,})/);
+  if(ytMatch){
+    videoBox.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytMatch[1]}" style="width:100%;height:100%;border:0;" allowfullscreen></iframe>`;
+  } else if(m.videoUrl && isSafeUrl(m.videoUrl)){
+    videoBox.innerHTML = `<a href="${escapeHtml(m.videoUrl)}" target="_blank" rel="noopener" style="color:var(--green-light);font-weight:700;display:flex;align-items:center;gap:8px;"><i data-lucide="link" class="icon-sm"></i> ${ss('فتح رابط الفيديو')}</a>`;
+  } else {
+    videoBox.innerHTML = `<i data-lucide="video" class="icon-sm"></i> ${ss('لا يوجد فيديو لهذا المود')}`;
+  }
+
+  const isOwner = currentUser && m.authorId===currentUser.id;
+  document.getElementById('modDeleteBtn').style.display = isOwner ? 'inline-flex' : 'none';
+  document.getElementById('modEditBtn').style.display = isOwner ? 'inline-flex' : 'none';
+
+  document.getElementById('modTags').innerHTML = (m.tags||[]).map(t=>`<span class="tag" data-tx>#${escapeHtml(t)}</span>`).join('') || '<span style="color:var(--muted);font-size:14px;">'+ss('لا توجد وسوم')+'</span>';
+  document.getElementById('modChangelog').innerHTML = (m.changelog||[]).map(c=>`<div class="changelog-entry"><span class="ver">${escapeHtml(c.v)}</span><span data-tx>${escapeHtml(c.note)}</span></div>`).join('') || '<p style="color:var(--muted)">'+ss('لا يوجد سجل تحديثات بعد.')+'</p>';
+
+  selectedRating = 5;
+  renderStars();
+  renderComments();
+  updateModFavBtn();
+  switchTab('desc');
+  go('mod');
+  history.pushState({ mod: m.id }, '', '?mod=' + m.id);
+  refreshIcons();
+}
+/* ============ SWIPEABLE GALLERY ============ */
+function renderGalleryMain(){
+  const imgs = (currentMod && currentMod.images) || [];
+  const box = document.getElementById('modGalleryMain');
+  if(imgs.length){
+    box.innerHTML = `<img src="${imgs[galleryIndex]}">`;
+  } else {
+    box.innerHTML = '<i data-lucide="image" class="icon-lg" style="width:52px;height:52px;"></i>';
+  }
+  document.querySelectorAll('#modGalleryThumbs div').forEach((d,i)=>d.classList.toggle('active', i===galleryIndex));
+  document.querySelectorAll('#galleryDots span').forEach((d,i)=>d.classList.toggle('active', i===galleryIndex));
+  refreshIcons();
+}
+function setGalleryIndex(i){ galleryIndex = i; renderGalleryMain(); }
+function galleryStep(dir){
+  const imgs = (currentMod && currentMod.images) || [];
+  if(!imgs.length) return;
+  galleryIndex = (galleryIndex + dir + imgs.length) % imgs.length;
+  renderGalleryMain();
+}
+(function initGallerySwipe(){
+  const box = document.querySelector('.gallery-main');
+  if(!box) return;
+  let startX = null;
+  box.addEventListener('touchstart', e=>{ startX = e.touches[0].clientX; }, {passive:true});
+  box.addEventListener('touchend', e=>{
+    if(startX===null) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    if(Math.abs(dx) > 40){ galleryStep(dx > 0 ? 1 : -1); } // RTL: swipe right = next visually
+    startX = null;
+  }, {passive:true});
+})();
+
+function switchTab(tab){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
+  document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+}
+async function copyModLink(){
+  if(!currentMod) return;
+  const url = location.origin + location.pathname + '?mod=' + currentMod.id;
+  try{
+    await navigator.clipboard.writeText(url);
+    showToast(ss('🔗 تم نسخ رابط المود'));
+    return;
+  } catch(err){}
+  // fallback for insecure contexts (e.g. file/content:// pages) where navigator.clipboard is blocked
+  try{
+    const ta = document.createElement('textarea');
+    ta.value = url;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    const ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    if(ok){ showToast(ss('🔗 تم نسخ رابط المود')); return; }
+  } catch(err){}
+  prompt(ss('انسخ الرابط يدويًا:'), url);
+}
+async function downloadMod(){
+  if(!currentMod) return;
+  if(!currentMod.fileUrl){ showToast(ss('📦 لا يوجد ملف حزمة مرفوع لهذا المود بعد')); return; }
+  const a = document.createElement('a');
+  a.href = currentMod.fileUrl;
+  a.download = currentMod.fileName || (currentMod.name+'.mcaddon');
+  a.target = '_blank';
+  document.body.appendChild(a); a.click(); a.remove();
+  const { error } = await sb.rpc('increment_mod_downloads', { mod_id: currentMod.id });
+  if(!error){
+    currentMod.downloads = (currentMod.downloads||0)+1;
+    document.getElementById('modDownloads').textContent = formatCount(currentMod.downloads);
+  }
+  showToast(ss('📦 جاري تحميل ')+currentMod.name+ss(' ...'));
+  addToDownloadHistory(currentMod);
+}
+
+/* ============ REPORTS ============ */
+async function reportMod(){
+  if(!currentMod) return;
+  if(!currentUser){ showToast(ss('⚠️ سجّل الدخول أولًا لتقييم أو التعليق')); go('auth'); return; }
+  const reason = prompt(ss('اكتب سبب البلاغ (مثلاً: محتوى مخالف، رابط لا يعمل، انتحال...)'));
+  if(reason===null) return; // user cancelled
+  if(!reason.trim()){ showToast(ss('يرجى كتابة سبب البلاغ')); return; }
+  const { error } = await sb.from('reports').insert({
+    mod_id: currentMod.id, mod_name: currentMod.name,
+    reporter_id: currentUser.id, reporter_username: currentUser.username,
+    reason: reason.trim().slice(0, 500), status: 'pending'
+  });
+  if(error){ showToast(ss('⚠️ تعذّر إرسال البلاغ، حاول لاحقًا')); return; }
+  showToast(ss('✅ تم إرسال بلاغك، شكرًا لمساعدتك بحماية المجتمع'));
+}
+
+/* ============ STARS ============ */
+function renderStars(){
+  const el = document.getElementById('ratingStars');
+  let html='';
+  for(let i=1;i<=5;i++) html+=`<span class="${i<=selectedRating?'filled':''}" onclick="setRating(${i})">★</span>`;
+  el.innerHTML = html;
+}
+function setRating(n){ selectedRating=n; renderStars(); }
+
+/* ============ COMMENTS ============ */
+function renderComments(){
+  const list = currentMod.comments || [];
+  document.getElementById('commentsList').innerHTML = list.map((c)=>{
+    const stars = Math.max(0, Math.min(5, Number(c.rating)||0));
+    return `
+    <div class="comment">
+      <div class="avatar"></div>
+      <div style="flex:1">
+        <div class="who" style="cursor:pointer;width:fit-content;" onclick="viewUserProfile('${c.user_id}')">${escapeHtml(c.username)}</div>
+        <div class="meta">${'★'.repeat(stars)}${'☆'.repeat(5-stars)}</div>
+        <div data-tx>${escapeHtml(c.text)}</div>
+        <div class="actions"><span onclick="likeComment(${c.id})" style="display:inline-flex;align-items:center;gap:5px;"><i data-lucide="thumbs-up" class="icon-sm"></i> ${c.likes||0}</span></div>
+      </div>
+    </div>`;
+  }).join('') || '<p style="color:var(--muted)">'+ss('لا توجد تعليقات بعد. كن أول من يعلّق!')+'</p>';
+  refreshIcons();
+}
+async function likeComment(commentId){
+  const { error } = await sb.rpc('increment_comment_likes', { comment_id: commentId });
+  if(error){ showToast('⚠️ '+error.message); return; }
+  const c = (currentMod.comments||[]).find(x=>x.id===commentId);
+  if(c) c.likes = (c.likes||0)+1;
+  renderComments();
+}
+async function addComment(){
+  if(!currentUser){ showToast(ss('⚠️ سجّل الدخول أولًا لتقييم أو التعليق')); go('auth'); return; }
+  if(!currentUser.approved){ showToast(ss('⚠️ حسابك بانتظار موافقة الإدارة قبل ما تقدر تعلّق')); return; }
+  const ta = document.querySelector('#tab-comments textarea');
+  if(!ta.value.trim()){ showToast(ss('اكتب تعليقًا أولاً')); return; }
+
+  const { data, error } = await sb.from('comments').insert({
+    mod_id: currentMod.id, user_id: currentUser.id, username: currentUser.username,
+    rating: selectedRating, text: ta.value.trim()
+  }).select().single();
+  if(error){ showToast('⚠️ '+error.message); return; }
+
+  const { error: rateErr } = await sb.rpc('add_mod_rating', { target_mod_id: currentMod.id, stars: selectedRating });
+  if(!rateErr){
+    currentMod.ratingSum = (currentMod.ratingSum||0) + selectedRating;
+    currentMod.ratingCount = (currentMod.ratingCount||0) + 1;
+    document.getElementById('modRating').textContent = modRatingAvg(currentMod) + ' / 5';
+  }
+
+  currentMod.comments.push(data);
+  ta.value='';
+  renderComments();
+  showToast(ss('✅ تم إضافة تعليقك وتحديث التقييم'));
+}
+
+/* ============ UPLOAD (real files → Supabase Storage, real row → pending review) ============ */
+function fillUploadCategories(){
+  document.getElementById('uploadCategory').innerHTML = CATEGORIES.filter(c=>c.name!=="الكل").map(c=>`<option>${c.name}</option>`).join('');
+}
+document.getElementById('upImages') && document.getElementById('upImages').addEventListener('change', function(){
+  const preview = document.getElementById('upImagePreview');
+  preview.innerHTML = '';
+  Array.from(this.files).forEach(f=>{
+    const url = URL.createObjectURL(f);
+    const img = document.createElement('img');
+    img.src = url;
+    img.style.cssText = 'width:70px;height:70px;object-fit:cover;border:2px solid #000;border-radius:6px;';
+    preview.appendChild(img);
+  });
+});
+document.getElementById('upFile') && document.getElementById('upFile').addEventListener('change', function(){
+  if(this.files[0]){
+    document.getElementById('upFileLabel').innerHTML = `<i data-lucide="package" class="icon-md"></i> ${this.files[0].name}`;
+    refreshIcons();
+  }
+});
+function sanitizeFileName(name){ return name.replace(/[^a-zA-Z0-9._-]/g,'_'); }
+
+/* ============ EDIT MOD ============ */
+function rteCmd(cmd, val){
+  const ed = document.getElementById('upDesc');
+  ed.focus();
+  document.execCommand(cmd, false, val || null);
+  updateRteToolbarState();
+}
+function rteColorCmd(color){
+  const ed = document.getElementById('upDesc');
+  ed.focus();
+  document.execCommand('foreColor', false, color);
+  updateRteToolbarState();
+}
+function rteColorToHex(color){
+  if(!color) return '';
+  if(color.startsWith('#')) return color.toLowerCase();
+  const m = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+  if(!m) return '';
+  return '#' + [1,2,3].map(i=>parseInt(m[i],10).toString(16).padStart(2,'0')).join('');
+}
+function updateRteToolbarState(){
+  const toolbar = document.getElementById('rteToolbar');
+  if(!toolbar) return;
+  ['bold','italic','underline','strikeThrough','insertUnorderedList','insertOrderedList','justifyRight','justifyCenter','justifyLeft'].forEach(cmd=>{
+    const btn = toolbar.querySelector(`[data-cmd="${cmd}"]`);
+    if(!btn) return;
+    let active = false;
+    try{ active = document.queryCommandState(cmd); }catch(e){}
+    btn.classList.toggle('rte-active', active);
+  });
+  let hex = '';
+  try{ hex = rteColorToHex(document.queryCommandValue('foreColor')); }catch(e){}
+  toolbar.querySelectorAll('.rte-color').forEach(sw=>{
+    sw.classList.toggle('rte-active', !!hex && sw.dataset.color.toLowerCase() === hex);
+  });
+}
+(function(){
+  const ed = document.getElementById('upDesc');
+  if(!ed) return;
+  ed.addEventListener('keyup', updateRteToolbarState);
+  ed.addEventListener('mouseup', updateRteToolbarState);
+  ed.addEventListener('focus', updateRteToolbarState);
+  document.addEventListener('selectionchange', ()=>{
+    if(document.activeElement === ed) updateRteToolbarState();
+  });
+})();
+function stripHtml(html){
+  const d = document.createElement('div');
+  d.innerHTML = html || '';
+  return d.textContent || '';
+}
+function sanitizeDescHtml(html){
+  // Strip stray zero-width characters some keyboards/autocorrect insert —
+  // harmless if left in, but no reason to keep them in the saved content.
+  html = (html || '').replace(/\u200B/g, '');
+  const allowedTags = new Set(['B','STRONG','U','BR','SPAN','DIV','P','I','EM','S','STRIKE','UL','OL','LI']);
+  // Parse into a <template> rather than a live element: its content sits in
+  // an inert document fragment, so a malicious payload like
+  // <img src=x onerror=...> can't fire before we get a chance to strip it —
+  // a plain div would parse it as live markup and execute it immediately.
+  const template = document.createElement('template');
+  template.innerHTML = html;
+  const src = template.content;
+  function clean(node){
+    [...node.childNodes].forEach(child=>{
+      if(child.nodeType === 3) return; // text node, keep as-is
+      if(child.nodeType !== 1){ node.removeChild(child); return; }
+      // Normalize legacy <font color="..."> (some Chrome/WebView versions
+      // still emit this from execCommand('foreColor')) into a span with an
+      // inline style, so colored text goes through the same path as
+      // everything else instead of losing its color on save.
+      if(child.tagName === 'FONT'){
+        const span = document.createElement('span');
+        const color = child.getAttribute('color');
+        if(color) span.setAttribute('style', 'color:'+color+';');
+        while(child.firstChild) span.appendChild(child.firstChild);
+        child.replaceWith(span);
+        child = span;
+      }
+      if(!allowedTags.has(child.tagName)){
+        // unwrap: replace element with its children instead of dropping content
+        while(child.firstChild) node.insertBefore(child.firstChild, child);
+        node.removeChild(child);
+        return;
+      }
+      // strip all attributes except a safe inline color/text-align style
+      const style = child.getAttribute('style');
+      const styleOut = [];
+      if(style){
+        const colorMatch = style.match(/color:\s*(#[0-9a-fA-F]{3,8}|rgb\([^)]+\))/);
+        if(colorMatch) styleOut.push('color:'+colorMatch[1]);
+        const alignMatch = style.match(/text-align:\s*(right|left|center|justify)/);
+        if(alignMatch) styleOut.push('text-align:'+alignMatch[1]);
+      }
+      [...child.attributes].forEach(a=>child.removeAttribute(a.name));
+      if(styleOut.length) child.setAttribute('style', styleOut.join(';')+';');
+      clean(child);
+    });
+  }
+  clean(src);
+  // src is a DocumentFragment (no innerHTML) — everything inside it has
+  // already been through clean(), so it's now safe to move into a live
+  // element just to read back the serialized markup.
+  const out = document.createElement('div');
+  out.appendChild(src);
+  return out.innerHTML;
+}
+function editMod(){
+  if(!currentMod || !currentUser || currentMod.authorId!==currentUser.id) return;
+  editingModId = currentMod.id;
+  document.getElementById('upName').value = currentMod.name || '';
+  document.getElementById('upVersion').value = currentMod.version || '';
+  document.getElementById('upMcVersion').value = currentMod.mcVersion || '';
+  document.getElementById('uploadCategory').value = currentMod.cat || '';
+  document.getElementById('upTags').value = (currentMod.tags||[]).join(', ');
+  document.getElementById('upDesc').innerHTML = currentMod.desc || '';
+  document.getElementById('upVideo').value = currentMod.videoUrl || '';
+  document.getElementById('upFileLabel').innerHTML = currentMod.fileName
+    ? `<i data-lucide="package" class="icon-md"></i> ${currentMod.fileName}${ss(' (اترك فارغًا للإبقاء عليه)')}`
+    : '<i data-lucide="package" class="icon-md"></i> '+ss('اضغط لاختيار الملف');
+  const preview = document.getElementById('upImagePreview');
+  preview.innerHTML = (currentMod.images||[]).map(src=>`<img src="${src}" style="width:70px;height:70px;object-fit:cover;border:2px solid #000;border-radius:6px;">`).join('');
+  document.getElementById('uploadPageTitle').innerHTML = '<i data-lucide="pencil" class="icon-md"></i> '+ss('تعديل مودك');
+  document.querySelector('#page-upload button[type="submit"]').innerHTML = '<i data-lucide="save" class="icon-sm"></i> '+ss('حفظ التعديلات');
+  refreshIcons();
+  go('upload');
+}
+function resetUploadFormMode(){
+  editingModId = null;
+  document.getElementById('uploadPageTitle').innerHTML = '<i data-lucide="upload-cloud" class="icon-md"></i> '+ss('رفع مود جديد');
+  document.querySelector('#page-upload button[type="submit"]').innerHTML = '<i data-lucide="send" class="icon-sm"></i> '+ss('نشر المود للمراجعة');
+}
+
+async function submitMod(e){
+  e.preventDefault();
+  if(!currentUser){ showToast(ss('⚠️ يجب تسجيل الدخول أولًا لنشر مود')); go('auth'); return; }
+  if(!currentUser.approved){ showToast(ss('⚠️ حسابك بانتظار موافقة الإدارة قبل ما تقدر تنشر')); return; }
+
+  const name = document.getElementById('upName').value.trim();
+  const version = document.getElementById('upVersion').value.trim();
+  const mcVersion = document.getElementById('upMcVersion').value.trim();
+  const cat = document.getElementById('uploadCategory').value;
+  const tags = document.getElementById('upTags').value.split(',').map(t=>t.trim()).filter(Boolean);
+  const descEl = document.getElementById('upDesc');
+  const desc = sanitizeDescHtml(descEl.innerHTML.trim());
+  const descPlain = descEl.textContent.trim();
+  const videoUrl = document.getElementById('upVideo').value.trim();
+  const fileInput = document.getElementById('upFile');
+  const imagesInput = document.getElementById('upImages');
+
+  if(!name || !version || !mcVersion || !descPlain){ showToast(ss('يرجى تعبئة الحقول المطلوبة (الاسم، الإصدار، النسخة، الوصف)')); return; }
+
+  const isEdit = !!editingModId;
+  const editedMod = isEdit ? MODS.find(x=>x.id===editingModId) : null;
+  if(isEdit && (!editedMod || editedMod.authorId!==currentUser.id)){ showToast(ss('⚠️ لا تملك صلاحية تعديل هذا المود')); resetUploadFormMode(); return; }
+
+  // file / malicious-file checks
+  const fileCheck = validateModFile(fileInput.files[0]);
+  if(!fileCheck.ok){ showToast('⚠️ '+fileCheck.msg); return; }
+  const imgCheck = validateImages(Array.from(imagesInput.files||[]));
+  if(!imgCheck.ok){ showToast('⚠️ '+imgCheck.msg); return; }
+
+  // prevent re-uploading the exact same mod name
+  if(!isEdit){
+    const { data: dupData } = await sb.from('mods').select('id').ilike('name', name).limit(1);
+    if(dupData && dupData.length){ showToast(ss('⚠️ يوجد مود بنفس الاسم منشور مسبقًا — جرّب اسمًا مختلفًا')); return; }
+  }
+
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  submitBtn.disabled = true;
+  showToast(ss('⏳ جاري الرفع...'));
+
+  try{
+    const images = [];
+    for(const file of Array.from(imagesInput.files||[])){
+      const path = `${currentUser.id}/${Date.now()}_${sanitizeFileName(file.name)}`;
+      const { error: upErr } = await sb.storage.from('mod-images').upload(path, file);
+      if(upErr){ throw upErr; }
+      const { data: pub } = sb.storage.from('mod-images').getPublicUrl(path);
+      images.push(pub.publicUrl);
+    }
+
+    let fileUrl = null, fileName = null;
+    if(fileInput.files[0]){
+      const file = fileInput.files[0];
+      const path = `${currentUser.id}/${Date.now()}_${sanitizeFileName(file.name)}`;
+      const { error: upErr } = await sb.storage.from('mod-files').upload(path, file);
+      if(upErr){ throw upErr; }
+      const { data: pub } = sb.storage.from('mod-files').getPublicUrl(path);
+      fileUrl = pub.publicUrl;
+      fileName = file.name;
+    }
+
+    if(isEdit){
+      const payload = {
+        name, version, mc_version: mcVersion, category: cat, tags,
+        description: desc, video_url: videoUrl, status: 'pending'
+      };
+      if(images.length) payload.images = images; // keep old images if none newly selected
+      if(fileUrl){ payload.file_url = fileUrl; payload.file_name = fileName; }
+      const { error: updErr } = await sb.from('mods').update(payload).eq('id', editingModId);
+      if(updErr) throw updErr;
+      showToast(ss('✅ تم حفظ التعديلات — المود رجع لقائمة المراجعة'));
+    } else {
+      const { error: insertErr } = await sb.from('mods').insert({
+        author_id: currentUser.id, name, version, mc_version: mcVersion,
+        category: cat, tags, description: desc, video_url: videoUrl,
+        images, file_url: fileUrl, file_name: fileName
+      });
+      if(insertErr) throw insertErr;
+      showToast(ss('📤 تم إرسال مودك للمراجعة — تابع حالته من "حسابي"'));
+    }
+
+    e.target.reset();
+    document.getElementById('upDesc').innerHTML = '';
+    document.getElementById('upImagePreview').innerHTML = '';
+    document.getElementById('upFileLabel').innerHTML = '<i data-lucide="package" class="icon-md"></i> '+ss('اضغط لاختيار الملف');
+    resetUploadFormMode();
+    refreshIcons();
+    await refreshMods();
+    renderGrids();
+    go('profile');
+    renderProfile();
+  } catch(err){
+    showToast(ss('⚠️ فشل: ')+(err.message||ss('خطأ غير معروف')));
+  } finally {
+    submitBtn.disabled = false;
+  }
+}
+
+/* ============ ADMIN (protected by real role, enforced by the database) ============ */
+function paginateAdminList(listElId, dotsElId, items, rowHtmlFn, emptyText){
+  const listEl = document.getElementById(listElId);
+  const dotsEl = document.getElementById(dotsElId);
+  if(!items.length){
+    listEl.innerHTML = `<div class="admin-list-page"><div style="text-align:center;color:var(--muted);padding:20px;">${emptyText}</div></div>`;
+    dotsEl.innerHTML = '';
+    return;
+  }
+  const pages = [];
+  for(let i=0;i<items.length;i+=5) pages.push(items.slice(i,i+5));
+  listEl.innerHTML = pages.map(page=>`<div class="admin-list-page">${page.map(rowHtmlFn).join('')}</div>`).join('');
+  dotsEl.innerHTML = pages.length>1 ? pages.map((_,i)=>`<span class="${i===0?'active':''}"></span>`).join('') : '';
+  listEl.scrollLeft = 0;
+  if(!listEl.dataset.pagerBound){
+    listEl.addEventListener('scroll', ()=>{
+      const total = dotsEl.children.length;
+      if(!total) return;
+      const idx = Math.min(total-1, Math.round(Math.abs(listEl.scrollLeft) / listEl.clientWidth));
+      [...dotsEl.children].forEach((d,i)=>d.classList.toggle('active', i===idx));
+    });
+    listEl.dataset.pagerBound = '1';
+  }
+}
+function pagerNav(listElId, dotsElId, dir){
+  const listEl = document.getElementById(listElId);
+  const dotsEl = document.getElementById(dotsElId);
+  const total = dotsEl.children.length;
+  if(!total) return;
+  const rtl = document.documentElement.dir === 'rtl';
+  const sign = rtl ? -1 : 1;
+  const cur = Math.min(total-1, Math.round(Math.abs(listEl.scrollLeft) / listEl.clientWidth));
+  const next = Math.min(total-1, Math.max(0, cur + dir));
+  listEl.scrollTo({ left: sign*next*listEl.clientWidth, behavior:'smooth' });
+}
+function renderAdmin(){
+  const pending = MODS.filter(m=>m.status==='pending');
+  const published = MODS.filter(m=>m.status==='published');
+
+  document.getElementById('adminPendingTable').innerHTML = pending.map(m=>`
+    <tr>
+      <td data-label="${ss('اسم المود')}">${escapeHtml(m.name)}</td>
+      <td data-label="${ss('المطور')}">${escapeHtml(m.author)}</td>
+      <td data-label="${ss('التصنيف')}">${escapeHtml(m.cat||'-')}</td>
+      <td data-label="${ss('الحالة')}">${ss('قيد المراجعة')}</td>
+      <td class="row-actions">
+        <button class="mc-btn primary" onclick="approveMod(${m.id})"><i data-lucide="check" class="icon-sm"></i> ${ss('موافقة')}</button>
+        <button class="mc-btn danger" onclick="rejectMod(${m.id})"><i data-lucide="x" class="icon-sm"></i> ${ss('حذف')}</button>
+      </td></tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--muted);">'+ss('لا توجد مودات بانتظار المراجعة 🎉')+'</td></tr>';
+
+  paginateAdminList('adminAllModsList', 'adminAllModsDots', published, m=>{
+    const thumb = (m.images && m.images.length) ? `<img src="${m.images[0]}">` : `<i data-lucide="package" class="icon-sm"></i>`;
+    const dateStr = formatModDate(m.createdAt);
+    return `<div class="admin-row" onclick="openMod(${m.id})">
+      <div class="admin-row-thumb">${thumb}</div>
+      <div class="admin-row-info">
+        <div class="admin-row-sub">${escapeHtml(m.author)}</div>
+        ${dateStr ? `<div class="admin-row-sub">${dateStr}</div>` : ''}
+        <div class="admin-row-name">${escapeHtml(m.name)}</div>
+      </div>
+      <div class="row-actions" onclick="event.stopPropagation()">
+        <button class="mc-btn danger" onclick="deleteModAdmin(${m.id})"><i data-lucide="trash-2" class="icon-sm"></i> ${ss('حذف')}</button>
+      </div>
+    </div>`;
+  }, ss('لا توجد مودات منشورة'));
+
+  sb.from('profiles').select('*').then(({data, error})=>{
+    if(error){ document.getElementById('adminUsersList').innerHTML = ''; document.getElementById('adminPendingAccountsTable').innerHTML = ''; return; }
+
+    const pendingAccounts = data.filter(u=>!u.approved);
+    document.getElementById('adminPendingAccountsTable').innerHTML = pendingAccounts.map(u=>`
+      <tr>
+        <td data-label="${ss('اسم المستخدم')}">${escapeHtml(u.username)}</td>
+        <td class="row-actions"><button class="mc-btn primary" onclick="approveAccount('${u.id}')"><i data-lucide="check" class="icon-sm"></i> ${ss('موافقة')}</button></td>
+      </tr>`).join('') || '<tr><td colspan="2" style="text-align:center;color:var(--muted);">'+ss('لا توجد حسابات بانتظار الموافقة 🎉')+'</td></tr>';
+
+    paginateAdminList('adminUsersList', 'adminUsersDots', data, u=>{
+      const count = MODS.filter(m=>m.authorId===u.id).length;
+      const isSelf = currentUser && currentUser.id===u.id;
+      const verifyBtn = isSelf ? '' : (u.verified
+        ? `<button class="mc-btn" onclick="setUserVerified('${u.id}', false)"><i data-lucide="badge-x" class="icon-sm"></i> ${ss('إلغاء التوثيق')}</button>`
+        : `<button class="mc-btn primary" onclick="setUserVerified('${u.id}', true)"><i data-lucide="badge-check" class="icon-sm"></i> ${ss('توثيق')}</button>`);
+      const avatar = u.avatar_url ? `<img src="${u.avatar_url}">` : `<i data-lucide="user" class="icon-sm"></i>`;
+      return `<div class="admin-row" onclick="viewUserProfile('${u.id}')">
+        <div class="admin-row-thumb round">${avatar}</div>
+        <div class="admin-row-info">
+          <div class="admin-row-name">${escapeHtml(u.username)}${verifiedBadge(u.verified)}</div>
+          <div class="admin-row-sub">${escapeHtml(u.role)}</div>
+          <div class="admin-row-sub">${count} ${ss('مودات منشورة')}</div>
+        </div>
+        <div class="row-actions" onclick="event.stopPropagation()">
+          ${verifyBtn}${isSelf ? '' : `<button class="mc-btn danger" onclick="deleteUserAccount('${u.id}','${(u.username||'').replace(/'/g,"\\'")}')"><i data-lucide="user-x" class="icon-sm"></i> ${ss('حذف')}</button>`}
+        </div>
+      </div>`;
+    }, ss('لا يوجد حسابات مسجّلة بعد'));
+    document.getElementById('adminStatUsers').textContent = data.length;
+    refreshIcons();
+  });
+
+  document.getElementById('adminStatTotal').textContent = published.length;
+  document.getElementById('adminStatPending').textContent = pending.length;
+  document.getElementById('adminStatDownloads').textContent = formatCount(published.reduce((s,m)=>s+(m.downloads||0),0));
+
+  sb.from('reports').select('*').eq('status','pending').order('created_at',{ascending:false}).then(({data, error})=>{
+    if(error){
+      // table not created yet on this Supabase project — hide gracefully instead of breaking the page
+      document.getElementById('adminReportsTable').innerHTML = '<tr><td colspan="3" style="text-align:center;color:var(--muted);">'+ss('لا توجد بلاغات 🎉')+'</td></tr>';
+      document.getElementById('adminStatReports').textContent = 0;
+      return;
+    }
+    document.getElementById('adminReportsTable').innerHTML = data.map(r=>`
+      <tr>
+        <td data-label="${ss('المود المبلّغ عنه')}">${escapeHtml(r.mod_name)}</td>
+        <td data-label="${ss('السبب')}">${escapeHtml(r.reason)}</td>
+        <td class="row-actions">
+          <button class="mc-btn" onclick="dismissReport(${r.id})"><i data-lucide="x" class="icon-sm"></i> ${ss('تجاهل البلاغ')}</button>
+          <button class="mc-btn danger" onclick="rejectMod(${r.mod_id})"><i data-lucide="trash-2" class="icon-sm"></i> ${ss('حذف المود')}</button>
+        </td></tr>`).join('') || '<tr><td colspan="3" style="text-align:center;color:var(--muted);">'+ss('لا توجد بلاغات 🎉')+'</td></tr>';
+    document.getElementById('adminStatReports').textContent = data.length;
+    refreshIcons();
+  });
+
+  refreshIcons();
+}
+async function dismissReport(reportId){
+  const { error } = await sb.from('reports').update({ status: 'resolved' }).eq('id', reportId);
+  if(error){ showToast('⚠️ '+error.message); return; }
+  showToast(ss('✅ تم تجاهل البلاغ'));
+  renderAdmin();
+}
+async function downloadBackup(){
+  showToast(ss('⏳ جاري تجهيز النسخة الاحتياطية...'));
+  try{
+    const [mods, profiles, comments, reports] = await Promise.all([
+      sb.from('mods').select('*'),
+      sb.from('profiles').select('*'),
+      sb.from('comments').select('*'),
+      sb.from('reports').select('*')
+    ]);
+    const backup = {
+      exported_at: new Date().toISOString(),
+      mods: mods.data || [],
+      profiles: profiles.data || [],
+      comments: comments.data || [],
+      reports: reports.data || []
+    };
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `mobymc_backup_${new Date().toISOString().slice(0,10)}.json`;
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+    showToast(ss('✅ تم تنزيل النسخة الاحتياطية'));
+  } catch(err){
+    showToast('⚠️ '+err.message);
+  }
+}
+async function approveAccount(userId){
+  const { error } = await sb.from('profiles').update({ approved: true }).eq('id', userId);
+  if(error){ showToast('⚠️ '+error.message); return; }
+  showToast(ss('✅ تمت الموافقة على الحساب'));
+  renderAdmin();
+  if(currentUser && currentUser.id===userId){ currentUser.approved = true; renderProfile(); }
+}
+async function setUserVerified(userId, verified){
+  const { error } = await sb.from('profiles').update({ verified }).eq('id', userId);
+  if(error){ showToast('⚠️ '+error.message); return; }
+  showToast(verified ? ss('✅ تم توثيق الحساب') : ss('تم إلغاء توثيق الحساب'));
+  await refreshMods();
+  renderAdmin();
+  if(currentUser && currentUser.id===userId){ currentUser.verified = verified; renderProfile(); }
+}
+async function deleteUserAccount(userId, username){
+  if(!confirm(ssf('حذف حساب "{0}" نهائيًا؟ كل مودّاته تُحذف معه — لا يمكن التراجع.', username))) return;
+  const { data: { session } } = await sb.auth.getSession();
+  if(!session){ showToast(ss('⚠️ الجلسة انتهت، سجّل الدخول من جديد')); return; }
+  try{
+    const resp = await fetch(`${SUPABASE_URL}/functions/v1/delete-user`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId })
+    });
+    const result = await resp.json();
+    if(!resp.ok){ throw new Error(result.error || ss('فشل الحذف')); }
+    showToast(ss('🗑️ تم حذف الحساب نهائيًا'));
+    await refreshMods();
+    renderAdmin();
+  } catch(err){
+    showToast('⚠️ '+err.message);
+  }
+}
+async function approveMod(id){
+  const m = MODS.find(x=>x.id===id);
+  if(!m) return;
+  const { error } = await sb.from('mods').update({ status: 'published' }).eq('id', id);
+  if(error){ showToast('⚠️ '+error.message); return; }
+  await refreshMods();
+  renderAdmin(); renderGrids();
+  showToast(ssf('✅ تمت الموافقة على "{0}" — أصبح ظاهرًا للجميع الآن', m.name));
+}
+async function rejectMod(id){
+  const m = MODS.find(x=>x.id===id);
+  const { error } = await sb.from('mods').delete().eq('id', id);
+  if(error){ showToast('⚠️ '+error.message); return; }
+  await refreshMods();
+  renderAdmin();
+  showToast(m ? ssf('🗑️ تم حذف "{0}" المخالف', m.name) : ss('🗑️ تم حذف المود المخالف'));
+}
+async function deleteModAdmin(id){
+  const m = MODS.find(x=>x.id===id);
+  if(!m) return;
+  if(!confirm(ssf('حذف "{0}" نهائيًا لكل الزوار؟', m.name))) return;
+  const { error } = await sb.from('mods').delete().eq('id', id);
+  if(error){ showToast('⚠️ '+error.message); return; }
+  await refreshMods();
+  renderAdmin(); renderGrids();
+  showToast(ssf('🗑️ تم حذف "{0}" نهائيًا', m.name));
+}
+
+/* ============ INIT ============ */
+async function init(){
+  checkInAppBrowser();
+  renderHotbar();
+  fillUploadCategories();
+  document.documentElement.lang = currentLang;
+  document.documentElement.dir = currentLang==='ar' ? 'rtl' : 'ltr';
+
+  const { data: { session } } = await sb.auth.getSession();
+  if(session){ await loadCurrentUserProfile(session.user); }
+  refreshAuthNav();
+
+  await refreshMods();
+  renderGrids();
+  const { count } = await sb.from('profiles').select('*', { count: 'exact', head: true });
+  document.getElementById('heroStatUsers').textContent = formatCount(count || 0);
+  if(currentLang==='en'){ applyStaticTextSwap(); translateDynamicContent(); }
+  refreshIcons();
+
+  const sharedModId = new URLSearchParams(location.search).get('mod');
+  if(sharedModId){ openMod(Number(sharedModId)); }
+}
+sb.auth.onAuthStateChange(async (event, session)=>{
+  if(session){ await loadCurrentUserProfile(session.user); } else { currentUser = null; }
+  refreshAuthNav();
+});
+init();
+
+</script>
+</body>
+</html>
